@@ -1,0 +1,149 @@
+<!-- Header Veolia -->
+<div class="veolia-header">
+  <div class="header-content">
+    <div class="veolia-logo-section">
+      <div class="veolia-logo">VEOLIA</div>
+      <div class="veolia-tagline">Resourcing the world</div>
+    </div>
+
+    <div class="header-title">
+      <h1>Sistema de Gestión de Residuos</h1>
+      <p>Compra de Bolsas</p>
+    </div>
+
+    <div class="header-actions">
+      <button class="back-btn" (click)="volverAlDashboard()">
+        <span class="material-icons">arrow_back</span>
+        Volver al Dashboard
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Navegación -->
+<div class="main-navigation">
+  <div class="nav-content">
+    <div class="nav-breadcrumb">
+      <span class="material-icons">dashboard</span>
+      <span>Panel del Cliente</span>
+      <span class="material-icons">chevron_right</span>
+      <span>Compra de Bolsas</span>
+    </div>
+  </div>
+</div>
+
+<!-- Contenido Principal -->
+<div class="dashboard-container">
+  <div class="dashboard-content">
+    <!-- Hero Section -->
+    <div class="hero-section">
+      <div class="hero-content">
+        <h2 class="hero-title">
+          <span class="material-icons hero-icon">shopping_cart</span>
+          Compra de Bolsas Certificadas
+        </h2>
+        <p class="hero-subtitle">
+          Selecciona el tipo y cantidad de bolsas que necesitas para una gestión segura de tus residuos
+        </p>
+      </div>
+    </div>
+
+    <!-- Formulario de Compra -->
+    <div class="purchase-form-container">
+      <form [formGroup]="formulario" (ngSubmit)="procesarCompra()" class="veolia-purchase-form">
+        <div class="form-header">
+          <h3 class="form-title">
+            <span class="material-icons">inventory</span>
+            Detalles de la Compra
+          </h3>
+        </div>
+
+        <div class="form-content">
+          <!-- Selección de Bolsa -->
+          <div class="form-section">
+            <div class="form-field">
+              <label for="idBolsa">
+                <span class="material-icons">category</span>
+                Tipo de Bolsa
+              </label>
+              <select
+                id="idBolsa"
+                formControlName="idBolsa"
+                (change)="actualizarPrecio()"
+                class="form-select"
+              >
+                <option value="" disabled>Selecciona un tipo de bolsa</option>
+                <option *ngFor="let bolsa of bolsas; let i = index" [value]="i">
+                  {{ bolsa.size }}
+                </option>
+              </select>
+            </div>
+
+            <div class="form-field">
+              <label for="cantidad">
+                <span class="material-icons">production_quantity_limits</span>
+                Cantidad
+              </label>
+              <input
+                type="number"
+                id="cantidad"
+                formControlName="cantidad"
+                min="1"
+                (input)="actualizarPrecio()"
+                class="form-input"
+                placeholder="Ingresa la cantidad"
+              />
+            </div>
+          </div>
+
+          <!-- Información de Precio -->
+          <div class="price-section">
+            <div class="price-card">
+              <div class="price-header">
+                <span class="material-icons">attach_money</span>
+                <h4>Resumen de Compra</h4>
+              </div>
+              <div class="price-details">
+                <div class="price-row">
+                  <span class="price-label">Precio Unitario:</span>
+                  <span class="price-value">{{ precioUnitario | currency:'USD':'symbol':'1.2-2' }}</span>
+                </div>
+                <div class="price-row total-row">
+                  <span class="price-label">Total a Pagar:</span>
+                  <span class="price-value total-value">{{ totalCompra | currency:'USD':'symbol':'1.2-2' }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+        </div>
+
+        <!-- Acciones del Formulario -->
+        <div class="form-actions">
+          <button type="button" class="cancel-button" (click)="volverAlDashboard()">
+            <span class="material-icons">cancel</span>
+            Cancelar
+          </button>
+          <button type="submit" class="purchase-button" [disabled]="formulario.invalid || totalCompra <= 0">
+            <span class="material-icons">shopping_cart_checkout</span>
+            Proceder al Pago
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Información Adicional -->
+    <div class="info-section">
+      <div class="info-cards-grid">
+        <div class="info-card">
+          <span class="material-icons info-icon">verified</span>
+          <div class="info-content">
+            <h4>Bolsas Certificadas</h4>
+            <p>Todas nuestras bolsas cumplen con los estándares internacionales de calidad</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

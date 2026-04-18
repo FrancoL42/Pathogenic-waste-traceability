@@ -1,0 +1,973 @@
+/* ===============================================
+   VARIABLES CSS VEOLIA + FALLBACKS
+   =============================================== */
+:root {
+  --veolia-blue-primary: #0066CC;
+  --veolia-blue-dark: #004A99;
+  --veolia-blue-light: #E6F3FF;
+  --veolia-green-primary: #00A650;
+  --veolia-green-dark: #007A3D;
+  --veolia-green-light: #E6F7ED;
+  --veolia-orange: #FF6600;
+  --veolia-teal: #00B5B8;
+  --veolia-gray-50: #F8F9FA;
+  --veolia-gray-100: #E9ECEF;
+  --veolia-gray-200: #DEE2E6;
+  --veolia-gray-300: #CED4DA;
+  --veolia-gray-400: #ADB5BD;
+  --veolia-gray-500: #6C757D;
+  --veolia-gray-600: #495057;
+  --veolia-gray-700: #343A40;
+  --veolia-gray-800: #1F2937;
+  --veolia-error: #DC3545;
+}
+
+:host {
+  display: block;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* ===============================================
+   HEADER VEOLIA - FORZAR COLORES
+   =============================================== */
+.veolia-header {
+  /* MÚLTIPLES FORMAS DE FORZAR EL FONDO AZUL */
+  background: var(--veolia-blue-primary, #0066CC) !important;
+  background: linear-gradient(135deg, var(--veolia-blue-primary, #0066CC) 0%, var(--veolia-blue-dark, #004A99) 100%) !important;
+  /* FALLBACK ABSOLUTO */
+  background: linear-gradient(135deg, #0066CC 0%, #004A99 100%) !important;
+
+  color: white !important;
+  padding: 1.5rem 0 !important;
+  box-shadow: 0 4px 12px rgba(0, 102, 204, 0.15) !important;
+  position: relative !important;
+  overflow: hidden !important;
+  min-height: 120px !important;
+}
+
+.veolia-header::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -10%;
+  width: 200px;
+  height: 200px;
+  background: rgba(255, 255, 255, 0.1) !important;
+  border-radius: 50%;
+  transform: rotate(45deg);
+}
+
+.header-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 2rem;
+  position: relative;
+  z-index: 1;
+  color: white !important;
+}
+
+.veolia-logo-section {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.veolia-logo {
+  font-size: 2.5rem;
+  font-weight: 800;
+  letter-spacing: 2px;
+  color: white !important;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.veolia-tagline {
+  font-size: 0.9rem;
+  font-style: italic;
+  opacity: 0.9;
+  margin-top: 0.25rem;
+  letter-spacing: 1px;
+  color: white !important;
+}
+
+.header-title {
+  text-align: center;
+  color: white !important;
+}
+
+.header-title h1 {
+  margin: 0;
+  font-size: 1.8rem;
+  font-weight: 600;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+  color: white !important;
+}
+
+.header-title p {
+  margin: 0.5rem 0 0 0;
+  font-size: 1rem;
+  opacity: 0.9;
+  color: white !important;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  color: white !important;
+}
+
+.bienvenida {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1rem;
+  font-weight: 500;
+  color: white !important;
+}
+
+.logout-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(255, 255, 255, 0.2) !important;
+  color: white !important;
+  border: 1px solid rgba(255, 255, 255, 0.3) !important;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+}
+
+.logout-btn:hover {
+  background: rgba(255, 255, 255, 0.3) !important;
+  border-color: rgba(255, 255, 255, 0.5) !important;
+  transform: translateY(-1px);
+  color: white !important;
+}
+
+/* ===============================================
+   NAVEGACIÓN - FORZAR COLORES
+   =============================================== */
+.main-navigation {
+  background: white !important;
+  border-bottom: 3px solid var(--veolia-green-primary, #00A650) !important;
+  /* FALLBACK */
+  border-bottom: 3px solid #00A650 !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+}
+
+.nav-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1rem 2rem;
+}
+
+.nav-breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--veolia-gray-600, #495057) !important;
+  font-weight: 500;
+}
+
+.nav-breadcrumb .material-icons {
+  color: var(--veolia-blue-primary, #0066CC) !important;
+}
+
+/* ===============================================
+   DASHBOARD PRINCIPAL - FORZAR FONDO
+   =============================================== */
+.dashboard-container {
+  min-height: calc(100vh - 200px);
+  background: linear-gradient(135deg, var(--veolia-gray-50, #F8F9FA) 0%, var(--veolia-blue-light, #E6F3FF) 100%) !important;
+  /* FALLBACK */
+  background: linear-gradient(135deg, #F8F9FA 0%, #E6F3FF 100%) !important;
+  padding: 2rem 0;
+}
+
+.dashboard-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+/* ===============================================
+   HERO SECTION - FORZAR FONDO BLANCO
+   =============================================== */
+.hero-section {
+  text-align: center;
+  margin-bottom: 3rem;
+  padding: 2rem;
+  background: white !important;
+  border-radius: 20px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  border: 1px solid var(--veolia-gray-200, #DEE2E6);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--veolia-green-primary, #00A650), var(--veolia-teal, #00B5B8)) !important;
+  /* FALLBACK */
+  background: linear-gradient(90deg, #00A650, #00B5B8) !important;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 1;
+}
+
+.hero-title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--veolia-gray-800, #1F2937) !important;
+  margin-bottom: 1rem;
+}
+
+.hero-icon {
+  font-size: 3rem;
+  color: var(--veolia-green-primary, #00A650) !important;
+  background: var(--veolia-green-light, #E6F7ED) !important;
+  padding: 0.5rem;
+  border-radius: 16px;
+}
+
+.hero-subtitle {
+  font-size: 1.2rem;
+  color: var(--veolia-gray-600, #495057) !important;
+  line-height: 1.6;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* ===============================================
+   GRID DE SERVICIOS
+   =============================================== */
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 2rem;
+  margin-bottom: 3rem;
+}
+
+.service-card {
+  background: white !important;
+  border-radius: 20px;
+  padding: 2rem;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  border: 1px solid var(--veolia-gray-200, #DEE2E6);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  min-height: 280px;
+}
+
+.service-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.15);
+}
+
+.service-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+}
+
+.primary-service::before {
+  background: var(--veolia-green-primary, #00A650) !important;
+  background: #00A650 !important;
+}
+
+.secondary-service::before {
+  background: var(--veolia-blue-primary, #0066CC) !important;
+  background: #0066CC !important;
+}
+
+.tertiary-service::before {
+  background: var(--veolia-teal, #00B5B8) !important;
+  background: #00B5B8 !important;
+}
+
+.service-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1.5rem;
+}
+
+.service-icon {
+  width: 64px;
+  height: 64px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white !important;
+  font-size: 2rem;
+}
+
+.primary-icon {
+  background: linear-gradient(135deg, var(--veolia-green-primary, #00A650), var(--veolia-green-dark, #007A3D)) !important;
+  background: linear-gradient(135deg, #00A650, #007A3D) !important;
+}
+
+.secondary-icon {
+  background: linear-gradient(135deg, var(--veolia-blue-primary, #0066CC), var(--veolia-blue-dark, #004A99)) !important;
+  background: linear-gradient(135deg, #0066CC, #004A99) !important;
+}
+
+.tertiary-icon {
+  background: linear-gradient(135deg, var(--veolia-teal, #00B5B8), #008B8E) !important;
+  background: linear-gradient(135deg, #00B5B8, #008B8E) !important;
+}
+
+.service-badge {
+  background: var(--veolia-orange, #FF6600) !important;
+  background: #FF6600 !important;
+  color: white !important;
+  padding: 0.25rem 0.75rem;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.service-content {
+  flex: 1;
+}
+
+.service-content h3 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--veolia-gray-800, #1F2937) !important;
+  margin-bottom: 0.75rem;
+}
+
+.service-content p {
+  color: var(--veolia-gray-600, #495057) !important;
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+}
+
+.service-features {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.feature-item {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  background: var(--veolia-gray-50, #F8F9FA) !important;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-size: 0.875rem;
+  color: var(--veolia-gray-700, #343A40) !important;
+  font-weight: 500;
+}
+
+.feature-item .material-icons {
+  font-size: 16px;
+  color: var(--veolia-green-primary, #00A650) !important;
+}
+
+.service-arrow {
+  align-self: flex-end;
+  margin-top: 1rem;
+  color: var(--veolia-gray-400, #ADB5BD) !important;
+  transition: all 0.3s ease;
+}
+
+.service-card:hover .service-arrow {
+  color: var(--veolia-blue-primary, #0066CC) !important;
+  transform: translateX(4px);
+}
+
+/* ===============================================
+   SECCIÓN DE INFORMACIÓN
+   =============================================== */
+.info-section {
+  margin-top: 2rem;
+}
+
+.info-card {
+  background: linear-gradient(135deg, var(--veolia-blue-primary, #0066CC), var(--veolia-blue-dark, #004A99)) !important;
+  background: linear-gradient(135deg, #0066CC, #004A99) !important;
+  color: white !important;
+  padding: 2rem;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  box-shadow: 0 8px 32px rgba(0, 102, 204, 0.2);
+}
+
+.info-icon {
+  font-size: 3rem;
+  background: rgba(255, 255, 255, 0.2) !important;
+  padding: 1rem;
+  border-radius: 16px;
+  color: white !important;
+}
+
+.info-content h4 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: white !important;
+}
+
+.info-content p {
+  margin-bottom: 1rem;
+  opacity: 0.9;
+  color: white !important;
+}
+
+.contact-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(255, 255, 255, 0.2) !important;
+  color: white !important;
+  border: 1px solid rgba(255, 255, 255, 0.3) !important;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+}
+
+.contact-btn:hover {
+  background: rgba(255, 255, 255, 0.3) !important;
+  border-color: rgba(255, 255, 255, 0.5) !important;
+  color: white !important;
+}
+
+/* ===============================================
+   MODALES VEOLIA
+   =============================================== */
+::ng-deep .mat-mdc-dialog-container {
+  border-radius: 16px !important;
+  overflow: hidden !important;
+  box-shadow: 0 24px 38px 3px rgba(0, 0, 0, 0.14) !important;
+}
+
+.veolia-modal-header {
+  background: linear-gradient(135deg, var(--veolia-blue-primary, #0066CC), var(--veolia-blue-dark, #004A99)) !important;
+  background: linear-gradient(135deg, #0066CC, #004A99) !important;
+  color: white !important;
+  padding: 2rem;
+  margin: 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.veolia-modal-header::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -20%;
+  width: 150px;
+  height: 150px;
+  background: rgba(255, 255, 255, 0.1) !important;
+  border-radius: 50%;
+}
+
+.veolia-modal-header h2 {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-size: 1.75rem;
+  font-weight: 600;
+  position: relative;
+  z-index: 1;
+  color: white !important;
+}
+
+.modal-icon {
+  font-size: 32px;
+  background: rgba(255, 255, 255, 0.2) !important;
+  padding: 0.5rem;
+  border-radius: 12px;
+  color: white !important;
+}
+
+.modal-subtitle {
+  margin: 0.75rem 0 0 0;
+  opacity: 0.9;
+  font-size: 1rem;
+  position: relative;
+  z-index: 1;
+  color: white !important;
+}
+
+.veolia-dialog-content {
+  padding: 2rem;
+  max-height: 60vh;
+  overflow-y: auto;
+  background: white !important;
+}
+
+.veolia-dialog-actions {
+  padding: 1.5rem 2rem;
+  background: var(--veolia-gray-50, #F8F9FA) !important;
+  border-top: 1px solid var(--veolia-gray-200, #DEE2E6) !important;
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+}
+
+.cancel-button {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--veolia-gray-600, #495057) !important;
+  border: 1px solid var(--veolia-gray-300, #CED4DA) !important;
+  border-radius: 8px;
+  padding: 0.75rem 1.5rem;
+  font-weight: 500;
+  background: white !important;
+}
+
+.cancel-button:hover {
+  background: var(--veolia-gray-100, #E9ECEF) !important;
+}
+
+.create-button {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: var(--veolia-green-primary, #00A650) !important;
+  background: #00A650 !important;
+  color: white !important;
+  border: none !important;
+  border-radius: 8px;
+  padding: 0.75rem 1.5rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.create-button:hover {
+  background: var(--veolia-green-dark, #007A3D) !important;
+  background: #007A3D !important;
+  transform: translateY(-1px);
+}
+
+/* ===============================================
+   HISTORIAL
+   =============================================== */
+.historial-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.historial-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.5rem;
+  background: var(--veolia-gray-50, #F8F9FA) !important;
+  border-radius: 12px;
+  border-left: 4px solid var(--veolia-green-primary, #00A650) !important;
+  border-left: 4px solid #00A650 !important;
+}
+
+.historial-icon {
+  background: var(--veolia-blue-light, #E6F3FF) !important;
+  color: var(--veolia-blue-primary, #0066CC) !important;
+  padding: 1rem;
+  border-radius: 12px;
+}
+
+.historial-info {
+  flex: 1;
+}
+
+.historial-info h4 {
+  margin: 0 0 0.25rem 0;
+  font-weight: 600;
+  color: var(--veolia-gray-800, #1F2937) !important;
+}
+
+.historial-info p {
+  margin: 0 0 0.5rem 0;
+  color: var(--veolia-gray-600, #495057) !important;
+}
+
+.historial-date {
+  font-size: 0.875rem;
+  color: var(--veolia-gray-500, #6C757D) !important;
+}
+
+.historial-status {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 500;
+}
+
+.historial-status.completed {
+  color: var(--veolia-green-primary, #00A650) !important;
+}
+
+/* ===============================================
+   FORMULARIO DE RETIRO
+   =============================================== */
+.retiro-form {
+  width: 100%;
+}
+
+.form-section {
+  background: var(--veolia-gray-50, #F8F9FA) !important;
+  padding: 2rem;
+  border-radius: 12px;
+  border-left: 4px solid var(--veolia-blue-primary, #0066CC) !important;
+  border-left: 4px solid #0066CC !important;
+}
+
+.section-title {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 0 0 1.5rem 0;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--veolia-gray-700, #343A40) !important;
+}
+
+.section-title .material-icons {
+  color: var(--veolia-blue-primary, #0066CC) !important;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.form-field {
+  position: relative;
+}
+
+.form-field.full-width {
+  grid-column: 1 / -1;
+}
+
+.form-field label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 600;
+  color: var(--veolia-gray-700, #343A40) !important;
+  margin-bottom: 0.75rem;
+  font-size: 0.95rem;
+}
+
+.form-field label .material-icons {
+  color: var(--veolia-blue-primary, #0066CC) !important;
+  font-size: 20px;
+}
+
+.form-input {
+  width: 100%;
+  padding: 1rem 1.25rem;
+  border: 2px solid var(--veolia-gray-200, #DEE2E6) !important;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-family: inherit;
+  transition: all 0.3s ease;
+  background-color: white !important;
+  color: var(--veolia-gray-800, #1F2937) !important;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: var(--veolia-blue-primary, #0066CC) !important;
+  box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.1);
+  background-color: var(--veolia-blue-light, #E6F3FF) !important;
+}
+
+.form-input::placeholder {
+  color: var(--veolia-gray-400, #ADB5BD) !important;
+}
+
+/* ===============================================
+   ESTILOS ADICIONALES PARA EL MODAL ACTUALIZADO
+   =============================================== */
+
+/* Formulario mejorado */
+.retiro-form .mat-mdc-form-field {
+  width: 100%;
+  margin-bottom: 1rem;
+}
+
+.retiro-form .mat-mdc-form-field .mat-mdc-text-field-wrapper {
+  background-color: white !important;
+  border-radius: 12px !important;
+}
+
+.retiro-form .mat-mdc-form-field.mat-focused .mdc-notched-outline__leading,
+.retiro-form .mat-mdc-form-field.mat-focused .mdc-notched-outline__notch,
+.retiro-form .mat-mdc-form-field.mat-focused .mdc-notched-outline__trailing {
+  border-color: var(--veolia-blue-primary, #0066CC) !important;
+  border-width: 2px !important;
+}
+
+/* Select personalizado */
+.retiro-form .mat-mdc-select-value {
+  color: var(--veolia-gray-800, #1F2937) !important;
+}
+
+.retiro-form .mat-mdc-select-placeholder {
+  color: var(--veolia-gray-400, #ADB5BD) !important;
+}
+
+/* Error messages */
+.mat-mdc-form-field .mat-error {
+  color: var(--veolia-error, #DC3545) !important;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+/* Info card pequeña */
+.info-card-small {
+  background: var(--veolia-blue-light, #E6F3FF) !important;
+  border: 1px solid var(--veolia-blue-primary, #0066CC) !important;
+  border-radius: 12px;
+  padding: 1rem;
+  margin-top: 1.5rem;
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+}
+
+.info-card-small .material-icons {
+  color: var(--veolia-blue-primary, #0066CC) !important;
+  background: white;
+  padding: 0.5rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 102, 204, 0.1);
+}
+
+.info-card-small div {
+  flex: 1;
+}
+
+.info-card-small strong {
+  color: var(--veolia-blue-dark, #004A99) !important;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.info-card-small ul {
+  margin: 0;
+  padding-left: 1.2rem;
+  color: var(--veolia-gray-700, #343A40) !important;
+}
+
+.info-card-small li {
+  margin-bottom: 0.25rem;
+  line-height: 1.4;
+}
+
+/* Botón deshabilitado */
+.create-button:disabled {
+  background: var(--veolia-gray-300, #CED4DA) !important;
+  color: var(--veolia-gray-500, #6C757D) !important;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+.create-button:disabled:hover {
+  background: var(--veolia-gray-300, #CED4DA) !important;
+  transform: none !important;
+}
+
+/* Validación visual mejorada */
+.retiro-form .mat-mdc-form-field.mat-form-field-invalid .mdc-notched-outline__leading,
+.retiro-form .mat-mdc-form-field.mat-form-field-invalid .mdc-notched-outline__notch,
+.retiro-form .mat-mdc-form-field.mat-form-field-invalid .mdc-notched-outline__trailing {
+  border-color: var(--veolia-error, #DC3545) !important;
+  border-width: 2px !important;
+}
+
+/* Dropdown de zonas */
+::ng-deep .mat-mdc-select-panel {
+  background: white !important;
+  border-radius: 12px !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15) !important;
+  max-height: 300px !important;
+}
+
+::ng-deep .mat-mdc-option {
+  padding: 1rem 1.5rem !important;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+::ng-deep .mat-mdc-option:hover {
+  background: var(--veolia-blue-light, #E6F3FF) !important;
+  color: var(--veolia-blue-dark, #004A99) !important;
+}
+
+::ng-deep .mat-mdc-option.mdc-list-item--selected {
+  background: var(--veolia-green-light, #E6F7ED) !important;
+  color: var(--veolia-green-dark, #007A3D) !important;
+}
+
+/* ===============================================
+   DATEPICKER PERSONALIZADO
+   =============================================== */
+::ng-deep .mat-datepicker-toggle {
+  color: var(--veolia-blue-primary, #0066CC) !important;
+}
+
+::ng-deep .mat-datepicker-toggle-default-icon {
+  color: var(--veolia-blue-primary, #0066CC) !important;
+}
+
+/* ===============================================
+   RESPONSIVE DESIGN
+   =============================================== */
+@media (max-width: 1024px) {
+  .header-content {
+    grid-template-columns: 1fr;
+    text-align: center;
+    gap: 1rem;
+  }
+
+  .header-actions {
+    justify-content: center;
+  }
+
+  .services-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .hero-title {
+    font-size: 2rem;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .info-card {
+    flex-direction: column;
+    text-align: center;
+  }
+}
+
+@media (max-width: 768px) {
+  .dashboard-content {
+    padding: 0 1rem;
+  }
+
+  .hero-section {
+    padding: 1.5rem;
+  }
+
+  .hero-title {
+    font-size: 1.75rem;
+  }
+
+  .hero-subtitle {
+    font-size: 1rem;
+  }
+
+  .service-card {
+    padding: 1.5rem;
+    min-height: auto;
+  }
+
+  .service-features {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+
+  .veolia-dialog-content {
+    padding: 1rem;
+  }
+
+  .veolia-modal-header {
+    padding: 1.5rem;
+  }
+
+  .veolia-dialog-actions {
+    padding: 1rem;
+    flex-direction: column-reverse;
+  }
+
+  .create-button,
+  .cancel-button {
+    width: 100%;
+    justify-content: center;
+  }
+
+  /* Responsive para el modal */
+  .retiro-form .form-row {
+    grid-template-columns: 1fr !important;
+  }
+
+  .info-card-small {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .info-card-small .material-icons {
+    align-self: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .veolia-logo {
+    font-size: 2rem;
+  }
+
+  .header-title h1 {
+    font-size: 1.5rem;
+  }
+
+  .hero-title {
+    font-size: 1.5rem;
+  }
+
+  .service-card {
+    padding: 1rem;
+  }
+
+  .info-card {
+    padding: 1.5rem;
+  }
+}

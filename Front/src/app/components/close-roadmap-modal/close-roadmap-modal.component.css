@@ -1,0 +1,325 @@
+.close-roadmap-modal {
+  max-width: 600px;
+  width: 100%;
+}
+
+/* Header */
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 0 16px 0;
+  border-bottom: 1px solid #e0e0e0;
+  margin-bottom: 20px;
+}
+
+.modal-header h2 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  color: #1565c0;
+  font-weight: 500;
+}
+
+/* Información de la ruta */
+.roadmap-info {
+  margin-bottom: 24px;
+}
+
+.info-card {
+  background: #f8f9fa;
+  border-left: 4px solid #1565c0;
+}
+
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.info-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.info-item mat-icon {
+  color: #1565c0;
+  font-size: 20px;
+}
+
+.info-details {
+  display: flex;
+  flex-direction: column;
+}
+
+.info-details .label {
+  font-size: 0.8rem;
+  color: #666;
+  margin-bottom: 2px;
+}
+
+.info-details .value {
+  font-weight: 500;
+  color: #333;
+}
+
+/* Progreso */
+.progress-section {
+  margin-top: 20px;
+}
+
+.progress-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.progress-header h4 {
+  margin: 0;
+  font-size: 1rem;
+  color: #333;
+}
+
+.progress-details {
+  margin-bottom: 8px;
+}
+
+.progress-numbers {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+  margin-bottom: 8px;
+}
+
+.collected {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1565c0;
+}
+
+.separator {
+  font-size: 1rem;
+  color: #999;
+}
+
+.total {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #666;
+}
+
+.label {
+  font-size: 0.9rem;
+  color: #666;
+  margin-left: 8px;
+}
+
+.progress-bar {
+  height: 6px !important;
+  border-radius: 3px !important;
+}
+
+/* Status chips */
+.mat-mdc-chip.status-pending {
+  background-color: #ffebee !important;
+  color: #c62828 !important;
+}
+
+.mat-mdc-chip.status-in-progress {
+  background-color: #fff3e0 !important;
+  color: #ef6c00 !important;
+}
+
+.mat-mdc-chip.status-completed {
+  background-color: #e8f5e8 !important;
+  color: #2e7d32 !important;
+}
+
+/* Warning section */
+.warning-section {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  background: #fff3e0;
+  padding: 12px;
+  border-radius: 8px;
+  margin-top: 16px;
+  border-left: 4px solid #ff9800;
+}
+
+.warning-text strong {
+  display: block;
+  margin-bottom: 4px;
+  color: #ef6c00;
+}
+
+.warning-text p {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #666;
+}
+
+/* Formulario */
+.close-form {
+  margin-bottom: 24px;
+}
+
+.close-form h3 {
+  margin: 0 0 16px 0;
+  color: #333;
+  font-size: 1.1rem;
+  font-weight: 500;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.form-field {
+  width: 100%;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.required-asterisk {
+  color: #f44336;
+  font-weight: bold;
+}
+
+/* Resumen del cierre */
+.closure-summary {
+  margin-bottom: 24px;
+}
+
+.summary-card {
+  background: #e8f5e8;
+  border-left: 4px solid #4caf50;
+}
+
+.summary-card h4 {
+  margin: 0 0 16px 0;
+  color: #2e7d32;
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.summary-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.summary-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.summary-icon {
+  font-size: 24px !important;
+  width: 24px !important;
+  height: 24px !important;
+}
+
+.summary-icon.success {
+  color: #4caf50;
+}
+
+.summary-icon.info {
+  color: #2196f3;
+}
+
+.summary-details {
+  display: flex;
+  flex-direction: column;
+}
+
+.summary-number {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #333;
+}
+
+.summary-label {
+  font-size: 0.8rem;
+  color: #666;
+}
+
+.action-note {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(76, 175, 80, 0.1);
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  color: #2e7d32;
+}
+
+.action-note mat-icon {
+  font-size: 16px;
+  color: #4caf50;
+}
+
+/* Botones */
+.modal-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+  padding-top: 16px;
+  border-top: 1px solid #e0e0e0;
+}
+
+.cancel-button,
+.confirm-button {
+  min-width: 120px;
+  height: 40px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.confirm-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .close-roadmap-modal {
+    padding: 16px;
+  }
+
+  .info-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+
+  .summary-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .modal-actions {
+    flex-direction: column;
+  }
+
+  .cancel-button,
+  .confirm-button {
+    width: 100%;
+    justify-content: center;
+  }
+}

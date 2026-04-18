@@ -1,0 +1,294 @@
+<!-- Header Veolia -->
+<div class="veolia-header">
+  <div class="header-content">
+    <div class="veolia-logo-section">
+      <div class="veolia-logo">VEOLIA</div>
+      <div class="veolia-tagline">Resourcing the world</div>
+    </div>
+
+    <div class="header-title">
+      <h1>Sistema de Trazabilidad de Residuos</h1>
+      <p>Gestión Inteligente y Sostenible</p>
+    </div>
+
+    <div class="header-actions">
+      <button class="header-btn primary" (click)="irADashboard()">
+        <span class="material-icons">login</span>
+        Ingresar
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Navegación -->
+<div class="main-navigation">
+  <div class="nav-content">
+    <div class="nav-breadcrumb">
+      <span class="material-icons">home</span>
+      <span>Inicio</span>
+    </div>
+  </div>
+</div>
+
+<!-- Hero Section Principal -->
+<div class="hero-container">
+  <div class="hero-content">
+    <!-- Contenido Principal -->
+    <div class="hero-text">
+      <div class="hero-badge">
+        <span class="material-icons">eco</span>
+        Solución Integral
+      </div>
+
+      <h1 class="hero-title">
+        Transformamos la gestión de residuos en
+        <span class="highlight">soluciones sostenibles</span>
+      </h1>
+
+      <p class="hero-description">
+        Nuestro sistema de trazabilidad permite el control completo del ciclo de vida de los residuos,
+        desde su generación hasta su disposición final, garantizando transparencia y cumplimiento normativo.
+      </p>
+
+      <div class="hero-features">
+        <div class="feature-item">
+          <span class="material-icons">verified</span>
+          <span>Trazabilidad completa</span>
+        </div>
+        <div class="feature-item">
+          <span class="material-icons">analytics</span>
+          <span>Reportes en tiempo real</span>
+        </div>
+        <div class="feature-item">
+          <span class="material-icons">security</span>
+          <span>Cumplimiento normativo</span>
+        </div>
+      </div>
+
+      <div class="hero-actions">
+        <button class="cta-button primary" (click)="irARegistro()">
+          <span class="material-icons">rocket_launch</span>
+          Comenzar ahora
+        </button>
+        <button class="cta-button secondary" (click)="masInfo()">
+          <span class="material-icons">play_circle</span>
+          Ver demo
+        </button>
+      </div>
+    </div>
+
+    <!-- Imagen/Visual -->
+    <div class="hero-visual">
+      <div class="visual-container">
+        <div class="visual-background"></div>
+        <img src="assets/veolia-recycling.png" alt="Gestión de Residuos Veolia" class="hero-image" />
+
+        <!-- Stats Cards Flotantes -->
+        <div class="stats-card stat-1">
+          <div class="stat-icon">
+            <span class="material-icons">recycling</span>
+          </div>
+          <div class="stat-info">
+            <span class="stat-number">95%</span>
+            <span class="stat-label">Reciclaje</span>
+          </div>
+        </div>
+
+        <div class="stats-card stat-2">
+          <div class="stat-icon">
+            <span class="material-icons">trending_up</span>
+          </div>
+          <div class="stat-info">
+            <span class="stat-number">+40%</span>
+            <span class="stat-label">Eficiencia</span>
+          </div>
+        </div>
+
+        <div class="stats-card stat-3">
+          <div class="stat-icon">
+            <span class="material-icons">eco</span>
+          </div>
+          <div class="stat-info">
+            <span class="stat-number">100%</span>
+            <span class="stat-label">Sostenible</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Sección de Servicios -->
+<div class="services-section">
+  <div class="services-content">
+    <div class="section-header">
+      <h2>¿Por qué elegir Veolia?</h2>
+      <p>Lideramos la transformación ecológica con soluciones innovadoras</p>
+    </div>
+
+    <div class="services-grid">
+      <div class="service-card">
+        <div class="service-icon">
+          <span class="material-icons">track_changes</span>
+        </div>
+        <h3>Trazabilidad Total</h3>
+        <p>Control completo desde la generación hasta la disposición final de residuos</p>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon">
+          <span class="material-icons">insights</span>
+        </div>
+        <h3>Análisis Inteligente</h3>
+        <p>Reportes detallados y análisis predictivo para optimizar procesos</p>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon">
+          <span class="material-icons">shield</span>
+        </div>
+        <h3>Cumplimiento Legal</h3>
+        <p>Garantizamos el cumplimiento de todas las normativas ambientales</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- NUEVA: Sección de Preguntas Frecuentes -->
+<div class="faq-section">
+  <div class="faq-content">
+    <div class="section-header">
+      <h2>Preguntas Frecuentes</h2>
+      <p>Resolvemos tus dudas sobre gestión de residuos</p>
+    </div>
+
+    <div class="faq-grid">
+      <div class="faq-item">
+        <div class="faq-question" (click)="toggleFaq(1)">
+          <div class="faq-icon">
+            <span class="material-icons">help_outline</span>
+          </div>
+          <h4>¿Qué tipos de residuos pueden ser gestionados?</h4>
+          <span class="material-icons faq-toggle" [class.rotated]="faqOpen[1]">expand_more</span>
+        </div>
+        <div class="faq-answer" [class.open]="faqOpen[1]">
+          <p>Gestionamos todos los tipos de residuos: patológicos, peligrosos, industriales, orgánicos e inorgánicos. Nuestro sistema se adapta a las normativas específicas de cada categoría.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question" (click)="toggleFaq(2)">
+          <div class="faq-icon">
+            <span class="material-icons">attach_money</span>
+          </div>
+          <h4>¿Cuáles son los costos del servicio?</h4>
+          <span class="material-icons faq-toggle" [class.rotated]="faqOpen[2]">expand_more</span>
+        </div>
+        <div class="faq-answer" [class.open]="faqOpen[2]">
+          <p>Los costos varían según el tipo y volumen de residuos. Ofrecemos planes flexibles desde empresas pequeñas hasta grandes corporaciones. Contáctanos para una cotización personalizada.</p>
+        </div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question" (click)="toggleFaq(4)">
+          <div class="faq-icon">
+            <span class="material-icons">gavel</span>
+          </div>
+          <h4>¿Cómo garantizan el cumplimiento normativo?</h4>
+          <span class="material-icons faq-toggle" [class.rotated]="faqOpen[4]">expand_more</span>
+        </div>
+        <div class="faq-answer" [class.open]="faqOpen[4]">
+          <p>Nuestro sistema está actualizado con todas las normativas locales y nacionales. Generamos automáticamente los reportes requeridos por organismos reguladores.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question" (click)="toggleFaq(5)">
+          <div class="faq-icon">
+            <span class="material-icons">support_agent</span>
+          </div>
+          <h4>¿Qué soporte técnico ofrecen?</h4>
+          <span class="material-icons faq-toggle" [class.rotated]="faqOpen[5]">expand_more</span>
+        </div>
+        <div class="faq-answer" [class.open]="faqOpen[5]">
+          <p>Brindamos soporte 24/7 vía teléfono, email y chat. Incluye mantenimiento preventivo, actualizaciones del sistema y capacitaciones continuas.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question" (click)="toggleFaq(6)">
+          <div class="faq-icon">
+            <span class="material-icons">security</span>
+          </div>
+          <h4>¿Qué tan segura es la información?</h4>
+          <span class="material-icons faq-toggle" [class.rotated]="faqOpen[6]">expand_more</span>
+        </div>
+        <div class="faq-answer" [class.open]="faqOpen[6]">
+          <p>Utilizamos encriptación de nivel bancario y almacenamiento en la nube con certificaciones ISO 27001. Todos los datos están protegidos y respaldados continuamente.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Call to Action Final -->
+<div class="cta-section">
+  <div class="cta-content">
+    <div class="cta-text">
+      <h2>¿Listo para transformar tu gestión de residuos?</h2>
+      <p>Únete a las empresas que ya confían en Veolia para su gestión sostenible</p>
+    </div>
+    <div class="cta-actions">
+      <button class="cta-button primary large" (click)="irADashboard()">
+        <span class="material-icons">arrow_forward</span>
+        Comenzar gratis
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Footer -->
+<div class="footer">
+  <div class="footer-content">
+    <div class="footer-section">
+      <div class="footer-logo">
+        <div class="veolia-logo">VEOLIA</div>
+        <div class="veolia-tagline">Resourcing the world</div>
+      </div>
+      <p>Transformando los desafíos ambientales en oportunidades sostenibles</p>
+    </div>
+
+    <div class="footer-section">
+      <h4>Servicios</h4>
+      <ul>
+        <li>Gestión de Residuos</li>
+        <li>Trazabilidad</li>
+        <li>Consultoría Ambiental</li>
+        <li>Reciclaje Industrial</li>
+      </ul>
+    </div>
+
+    <div class="footer-section">
+      <h4>Acceso Rápido</h4>
+      <ul>
+        <li><a href="/login" class="footer-link">Iniciar Sesión</a></li>
+        <li><a href="#" (click)="irARegistro()" class="footer-link">Registrarse</a></li>
+        <li><a href="#faq" class="footer-link">Preguntas Frecuentes</a></li>
+        <li><a href="#" class="footer-link">Términos y Condiciones</a></li>
+        <li><a href="#" class="footer-link">Política de Privacidad</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-section">
+      <h4>Contacto</h4>
+      <ul>
+        <li>info&#64;veolia.com</li>
+        <li>+54 11 1234-5678</li>
+        <li>Códoba, Argentina</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <p>&copy; 2024 Veolia. Todos los derechos reservados.</p>
+  </div>
+</div>

@@ -1,0 +1,178 @@
+<!-- Header con estilo VEOLIA -->
+<div class="veolia-header">
+  <div class="header-left">
+    <div class="veolia-brand">
+      <h1>VEOLIA</h1>
+      <p class="tagline">Resourcing the world</p>
+    </div>
+  </div>
+  <div class="header-center">
+    <h2 class="system-title">Sistema de Gestión de Residuos</h2>
+    <p class="panel-subtitle">Panel de Empleado</p>
+  </div>
+  <div class="header-right">
+    <button mat-raised-button color="primary" (click)="refresh()" [disabled]="loading">
+      <mat-icon>refresh</mat-icon>
+      Actualizar
+    </button>
+    <button mat-raised-button color="warn" (click)="logout()">
+      <mat-icon>logout</mat-icon>
+      Salir
+    </button>
+  </div>
+</div>
+
+<!-- Green divider line -->
+<div class="green-divider"></div>
+
+<!-- Welcome section -->
+<div class="welcome-section">
+  <div class="container">
+    <div class="welcome-content">
+      <h3>🚛 Bienvenido, {{ employeeName }}</h3>
+      <p class="date-info">{{ currentDate | date:'fullDate' }}</p>
+    </div>
+  </div>
+</div>
+
+<!-- Loading -->
+<div class="container" *ngIf="loading">
+  <div class="loading-container">
+    <mat-spinner diameter="50"></mat-spinner>
+    <p class="loading-text">Cargando hojas de ruta...</p>
+  </div>
+</div>
+
+<!-- Error -->
+<div class="container" *ngIf="error && !loading">
+  <mat-card class="error-card">
+    <mat-card-content>
+      <div class="error-content">
+        <mat-icon color="warn" class="error-icon">error</mat-icon>
+        <h3>{{ error }}</h3>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>
+
+<!-- Main content -->
+<div class="container" *ngIf="!loading && !error">
+  <!-- No roadmaps -->
+  <div *ngIf="roadmaps.length === 0" class="no-roadmaps">
+    <mat-card class="empty-card">
+      <mat-card-content>
+        <div class="empty-content">
+          <mat-icon class="empty-icon">event_busy</mat-icon>
+          <h3>No hay hojas de ruta asignadas</h3>
+          <p>No tienes rutas programadas para hoy</p>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <!-- Roadmaps grid -->
+  <div *ngIf="roadmaps.length > 0" class="roadmaps-grid">
+    <mat-card *ngFor="let roadmap of roadmaps" class="roadmap-card" [class.completed]="getRoadmapStatus(roadmap) === 'COMPLETADO'">
+      <!-- Card header -->
+      <mat-card-header>
+        <div class="card-header-content">
+          <div class="zone-info">
+            <mat-card-title class="zone-title">
+              <mat-icon class="zone-icon">location_on</mat-icon>
+              {{ roadmap.zone }}
+            </mat-card-title>
+            <mat-card-subtitle class="time-subtitle">
+              <mat-icon>schedule</mat-icon>
+              {{ roadmap.collectDate | date:'shortTime' }}
+            </mat-card-subtitle>
+          </div>
+          <div class="status-section">
+            <mat-chip-set>
+              <mat-chip [class]="getStatusClass(getRoadmapStatus(roadmap))">
+                <mat-icon matChipAvatar>{{ getStatusIcon(getRoadmapStatus(roadmap)) }}</mat-icon>
+                {{ getRoadmapStatus(roadmap) }}
+              </mat-chip>
+            </mat-chip-set>
+          </div>
+        </div>
+      </mat-card-header>
+
+      <mat-card-content>
+        <!-- Progress section -->
+        <div class="progress-section">
+          <div class="progress-info">
+            <div class="progress-numbers">
+              <span class="collected">{{ getRoadmapProgress(roadmap).completed }}</span>
+              <span class="separator">/</span>
+              <span class="total">{{ getRoadmapProgress(roadmap).total }}</span>
+              <span class="label">bolsas recolectadas</span>
+            </div>
+            <div class="progress-percentage">
+              {{ getRoadmapProgress(roadmap).percentage }}%
+            </div>
+          </div>
+
+          <mat-progress-bar
+            mode="determinate"
+            [value]="getRoadmapProgress(roadmap).percentage"
+            class="progress-bar">
+          </mat-progress-bar>
+        </div>
+
+        <mat-divider class="section-divider"></mat-divider>
+
+        <!-- Generators summary -->
+        <div class="generators-section">
+          <div class="generators-header">
+            <mat-icon>business</mat-icon>
+            <span class="generators-count">{{ roadmap.generators.length }} generadores asignados</span>
+          </div>
+
+          <div class="generators-status">
+            <div class="status-item" *ngIf="getPendingCount(roadmap) > 0">
+              <mat-icon class="status-icon pending">radio_button_unchecked</mat-icon>
+              <span>{{ getPendingCount(roadmap) }} pendientes</span>
+            </div>
+
+            <div class="status-item" *ngIf="getInProgressCount(roadmap) > 0">
+              <mat-icon class="status-icon in-progress">adjust</mat-icon>
+              <span>{{ getInProgressCount(roadmap) }} en proceso</span>
+            </div>
+
+            <div class="status-item" *ngIf="getCompletedCount(roadmap) > 0">
+              <mat-icon class="status-icon completed">check_circle</mat-icon>
+              <span>{{ getCompletedCount(roadmap) }} completados</span>
+            </div>
+          </div>
+        </div>
+      </mat-card-content>
+
+      <mat-card-actions align="end">
+        <div class="action-buttons">
+          <!-- Botón: Trabajar Ruta -->
+          <button
+            mat-raised-button
+            [color]="getRoadmapStatus(roadmap) === 'COMPLETADO' ? 'accent' : 'primary'"
+            (click)="workRoadmap(roadmap.roadmapId)"
+            [disabled]="getRoadmapStatus(roadmap) === 'COMPLETADO'"
+            class="work-button">
+            <mat-icon>{{ getRoadmapStatus(roadmap) === 'COMPLETADO' ? 'check_circle' : 'qr_code_scanner' }}</mat-icon>
+            {{ getRoadmapStatus(roadmap) === 'COMPLETADO' ? 'Completado' : 'Trabajar Ruta' }}
+          </button>
+
+          <!-- 🆕 NUEVO: Botón Cerrar Ruta -->
+          <button
+            mat-raised-button
+            [color]="getCloseButtonClass(roadmap)"
+            (click)="openCloseRoadmapModal(roadmap)"
+            [disabled]="!canCloseRoadmap(roadmap)"
+            class="route-button"
+            [matTooltip]="canCloseRoadmap(roadmap) ? 'Finalizar y entregar precintos a planta' : 'No hay precintos asignados'">
+            <mat-icon>flag</mat-icon>
+            {{ getCloseButtonText(roadmap) }}
+          </button>
+        </div>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+</div>

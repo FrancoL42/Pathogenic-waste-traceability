@@ -1,0 +1,214 @@
+<!-- alta-generador.component.html (ACTUALIZADO) -->
+<div class="registro-container">
+  <!-- Panel Izquierdo - Branding -->
+  <div class="registro-left">
+    <div class="left-content">
+      <div class="veolia-logo">VEOLIA</div>
+      <div class="veolia-tagline">Resourcing the world</div>
+
+      <h1 class="slogan">Su aliado en la ruta hacia la descarbonización</h1>
+      <p class="subtext">
+        Nuestro compromiso es asegurar el éxito en la implementación de soluciones y garantizar resultados sostenibles.
+      </p>
+    </div>
+  </div>
+
+  <!-- Panel Derecho - Formulario -->
+  <div class="registro-right">
+    <div class="form-container">
+      <div class="form-header">
+        <h2 class="form-title">
+          <span class="material-icons form-title-icon">business</span>
+          Registro de Generador
+        </h2>
+        <p class="form-subtitle">Complete los datos para registrar un nuevo generador de residuos</p>
+      </div>
+
+      <form [formGroup]="formulario" (ngSubmit)="registrar()">
+        <div class="form-grid">
+          <!-- Nombre Completo -->
+          <div class="form-group full-width">
+            <label for="name">
+              <span class="material-icons">person</span>
+              Nombre Completo
+            </label>
+            <input
+              id="name"
+              formControlName="name"
+              type="text"
+              placeholder="Ej: Juan Pérez"
+              class="form-input"
+            />
+            <div class="form-error" *ngIf="formulario.get('name')?.invalid && formulario.get('name')?.touched">
+              El nombre es requerido
+            </div>
+          </div>
+
+          <!-- Email -->
+          <div class="form-group">
+            <label for="email">
+              <span class="material-icons">email</span>
+              Email
+            </label>
+            <input
+              id="email"
+              formControlName="email"
+              type="email"
+              placeholder="ejemplo@correo.com"
+              class="form-input"
+            />
+            <div class="form-error" *ngIf="formulario.get('email')?.invalid && formulario.get('email')?.touched">
+              Ingrese un email válido
+            </div>
+          </div>
+
+          <!-- Contacto -->
+          <div class="form-group">
+            <label for="contact">
+              <span class="material-icons">phone</span>
+              Contacto
+            </label>
+            <input
+              id="contact"
+              formControlName="contact"
+              type="text"
+              placeholder="Ej: +54 9 11 1234 5678"
+              class="form-input"
+            />
+            <div class="form-error" *ngIf="formulario.get('contact')?.invalid && formulario.get('contact')?.touched">
+              El contacto es requerido
+            </div>
+          </div>
+
+          <!-- Domicilio -->
+          <div class="form-group full-width">
+            <label for="address">
+              <span class="material-icons">location_on</span>
+              Domicilio
+            </label>
+            <input
+              id="address"
+              formControlName="address"
+              type="text"
+              placeholder="Ej: Calle Falsa 123, Ciudad"
+              class="form-input"
+            />
+            <div class="form-error" *ngIf="formulario.get('address')?.invalid && formulario.get('address')?.touched">
+              El domicilio es requerido
+            </div>
+          </div>
+
+          <!-- Ubicación GPS -->
+          <div class="form-group full-width">
+            <label>
+              <span class="material-icons">gps_fixed</span>
+              Ubicación GPS (Opcional)
+            </label>
+
+            <div class="location-section-simple">
+              <!-- Estado de ubicación -->
+              <div class="location-status-simple" [class]="hasValidCoordinates() ? 'has-location' : 'no-location'">
+                <mat-icon>{{ hasValidCoordinates() ? 'check_circle' : 'location_off' }}</mat-icon>
+                <div class="location-text">
+                  <span class="status-title">{{ getLocationStatusText() }}</span>
+                  <span class="location-details" *ngIf="hasValidCoordinates()">
+                   {{ getLocationDetails() }}
+                 </span>
+                </div>
+
+                <!-- Botón pequeño del mapa -->
+                <button
+                  type="button"
+                  class="map-button-small"
+                  (click)="openMapPicker()"
+                  [disabled]="isLocationPickerOpen"
+                  matTooltip="Seleccionar ubicación en el mapa">
+                  <mat-icon>map</mat-icon>
+                </button>
+              </div>
+
+              <!-- Ayuda -->
+              <div class="location-help-simple">
+                <mat-icon>info</mat-icon>
+                <span>Haz clic en el ícono del mapa para seleccionar tu ubicación exacta</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Zona de Recolección -->
+          <div class="form-group full-width">
+            <label for="zona">
+              <span class="material-icons">map</span>
+              Zona de Recolección
+            </label>
+            <select
+              id="zona"
+              formControlName="zona"
+              class="form-select"
+              required>
+              <option *ngFor="let zona of zonas" [value]="zona.name">
+                {{ zona.name }}
+              </option>
+            </select>
+            <div class="form-error" *ngIf="formulario.get('zona')?.invalid && formulario.get('zona')?.touched">
+              La zona es requerida
+            </div>
+          </div>
+
+          <!-- Tipo -->
+          <div class="form-group full-width">
+            <label for="type">
+              <span class="material-icons">category</span>
+              Tipo de Generador
+            </label>
+            <select
+              id="type"
+              formControlName="type"
+              class="form-select"
+            >
+              <option value="publico">🏛️ Público</option>
+              <option value="privado">🏢 Privado</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- 🆕 SECCIÓN DE TÉRMINOS Y CONDICIONES -->
+        <div class="terms-section">
+          <label class="checkbox-container">
+            <input
+              type="checkbox"
+              formControlName="acceptTerms"
+              class="terms-checkbox"
+              required>
+            <span class="checkmark"></span>
+            <span class="terms-text">
+              Acepto los
+              <button
+                type="button"
+                class="terms-link"
+                (click)="openTermsModal()">
+                Términos y Condiciones
+              </button>
+            </span>
+          </label>
+          <div class="form-error" *ngIf="formulario.get('acceptTerms')?.invalid && formulario.get('acceptTerms')?.touched">
+            Debe aceptar los términos y condiciones para continuar
+          </div>
+        </div>
+
+        <!-- Botón de Registro -->
+        <div class="form-actions">
+          <button
+            type="submit"
+            [disabled]="formulario.invalid"
+            class="btn-registrar"
+            [class.disabled]="formulario.invalid"
+          >
+            <span class="material-icons">check_circle</span>
+            Registrar Generador
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

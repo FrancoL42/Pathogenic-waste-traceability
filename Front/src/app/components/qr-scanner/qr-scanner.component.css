@@ -1,0 +1,312 @@
+/* Header del modal */
+.scanner-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 24px 16px 24px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.scanner-header h2 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  color: #1565c0;
+  font-size: 1.3rem;
+}
+
+.close-button {
+  color: #666;
+}
+
+/* Info del generador */
+.generator-info {
+  padding: 16px 24px;
+  background: #f8f9fa;
+}
+
+.generator-details h3 {
+  margin: 0 0 8px 0;
+  color: #333;
+  font-size: 1.1rem;
+}
+
+.progress-info {
+  margin: 0 0 12px 0;
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.generator-progress {
+  height: 6px !important;
+  border-radius: 3px !important;
+}
+
+/* Contenido principal */
+.scanner-content {
+  padding: 24px !important;
+  min-height: 400px;
+}
+
+/* Toggle de entrada */
+.input-toggle {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 24px;
+}
+
+.mat-button-toggle-group {
+  border-radius: 8px !important;
+}
+
+.mat-button-toggle {
+  display: flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  padding: 8px 16px !important;
+}
+
+/* Scanner section */
+.scanner-section {
+  text-align: center;
+}
+
+.scanner-container {
+  position: relative;
+  min-height: 300px;
+  border: 2px dashed #e0e0e0;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fafafa;
+  margin-bottom: 16px;
+}
+
+/* Placeholder del scanner */
+.scanner-placeholder {
+  text-align: center;
+  color: #666;
+}
+
+.camera-icon {
+  font-size: 4rem !important;
+  height: 4rem !important;
+  width: 4rem !important;
+  color: #bbb;
+  margin-bottom: 16px;
+}
+
+.scanner-placeholder p {
+  margin: 8px 0;
+}
+
+.placeholder-text {
+  font-size: 0.9rem;
+  color: #999;
+  margin-bottom: 20px !important;
+}
+
+/* Scanner real (cuando esté instalado) */
+.qr-scanner {
+  width: 100%;
+  height: 300px;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+/* Overlay de procesamiento */
+.processing-overlay {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  color: #1565c0;
+}
+
+.processing-overlay p {
+  margin: 0;
+  font-weight: 500;
+}
+
+/* Instrucciones del scanner */
+.scanner-instructions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  justify-content: center;
+  color: #666;
+  font-size: 0.9rem;
+  margin-top: 12px;
+}
+
+.scanner-instructions mat-icon {
+  color: #2196f3;
+}
+
+/* Controles del scanner */
+.scanner-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 12px;
+  padding: 8px;
+  background: rgba(33, 150, 243, 0.1);
+  border-radius: 8px;
+}
+
+.scanner-controls button {
+  color: #2196f3;
+}
+
+.scanner-controls button.active {
+  background: #2196f3;
+  color: white;
+}
+
+.torch-label {
+  font-size: 0.9rem;
+  color: #666;
+}
+
+/* Sección manual */
+.manual-section {
+  text-align: center;
+}
+
+.manual-input {
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.manual-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  margin-bottom: 24px;
+}
+
+.manual-actions button {
+  min-width: 120px;
+}
+
+/* Ejemplo de formato */
+.format-example {
+  background: #e3f2fd;
+  border: 1px solid #bbdefb;
+  border-radius: 8px;
+  padding: 16px;
+  text-align: left;
+  display: flex;
+  gap: 12px;
+}
+
+.format-example mat-icon {
+  color: #1976d2;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.example-title {
+  font-weight: 500;
+  margin: 0 0 8px 0;
+  color: #333;
+}
+
+.format-example code {
+  background: #fff;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-family: 'Courier New', monospace;
+  color: #d32f2f;
+  font-size: 0.9rem;
+}
+
+.example-text {
+  margin: 8px 0 0 0;
+  font-size: 0.9rem;
+  color: #666;
+}
+
+/* Resultado del escaneo */
+.scan-result {
+  background: #e8f5e8;
+  border: 1px solid #c8e6c9;
+  border-radius: 8px;
+  padding: 16px;
+  margin: 16px 0;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.result-icon {
+  color: #4caf50;
+  flex-shrink: 0;
+}
+
+.scan-result p {
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+.scan-result code {
+  background: #fff;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-family: 'Courier New', monospace;
+}
+
+/* Error */
+.error-section {
+  background: #ffebee;
+  border: 1px solid #ffcdd2;
+  border-radius: 8px;
+  padding: 16px;
+  margin: 16px 0;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.error-section mat-icon {
+  flex-shrink: 0;
+}
+
+.error-message {
+  margin: 0;
+  color: #d32f2f;
+  font-weight: 500;
+}
+
+/* Acciones del diálogo */
+.dialog-actions {
+  padding: 16px 24px 20px 24px !important;
+  border-top: 1px solid #e0e0e0;
+}
+
+.dialog-actions button {
+  min-width: 100px;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .scanner-content {
+    padding: 16px !important;
+  }
+
+  .scanner-container {
+    min-height: 250px;
+  }
+
+  .manual-actions {
+    flex-direction: column;
+  }
+
+  .format-example {
+    flex-direction: column;
+    gap: 8px;
+  }
+}

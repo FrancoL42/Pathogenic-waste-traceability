@@ -1,0 +1,448 @@
+<!-- Header con estilo VEOLIA -->
+<div class="veolia-header">
+  <div class="header-left">
+    <div class="veolia-brand">
+      <h1>VEOLIA</h1>
+      <p class="tagline">Resourcing the world</p>
+    </div>
+  </div>
+  <div class="header-center">
+    <h2 class="system-title">Sistema de Gestión de Residuos</h2>
+    <p class="panel-subtitle">Panel de Tratamiento</p>
+  </div>
+  <div class="header-right">
+    <button mat-raised-button color="primary" (click)="refresh()" [disabled]="loading">
+      <mat-icon>refresh</mat-icon>
+      Actualizar
+    </button>
+    <button mat-raised-button color="accent" (click)="createNewContainer()">
+      <mat-icon>add_box</mat-icon>
+      Nuevo Contenedor
+    </button>
+    <button mat-raised-button color="warn" (click)="logout()">
+      <mat-icon>logout</mat-icon>
+      Salir
+    </button>
+  </div>
+</div>
+
+<!-- Green divider line -->
+<div class="green-divider"></div>
+
+<!-- Welcome section -->
+<div class="welcome-section">
+  <div class="container">
+    <div class="welcome-content">
+      <h3>🧪 Bienvenido, Empleado Tratador</h3>
+      <p class="date-info">{{ currentDate | date:'fullDate' }}</p>
+    </div>
+  </div>
+</div>
+
+<!-- Loading -->
+<div class="container" *ngIf="loading">
+  <div class="loading-container">
+    <mat-spinner diameter="50"></mat-spinner>
+    <p class="loading-text">Cargando datos de tratamiento...</p>
+  </div>
+</div>
+
+<!-- Error -->
+<div class="container" *ngIf="error && !loading">
+  <mat-card class="error-card">
+    <mat-card-content>
+      <div class="error-content">
+        <mat-icon color="warn" class="error-icon">error</mat-icon>
+        <h3>{{ error }}</h3>
+        <button mat-raised-button color="primary" (click)="refresh()">
+          <mat-icon>refresh</mat-icon>
+          Reintentar
+        </button>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>
+
+<!-- Main content -->
+<div class="container" *ngIf="!loading && !error">
+
+  <!-- Precintos Disponibles Section -->
+  <mat-card class="section-card">
+    <mat-card-header>
+      <div class="card-header-content">
+        <div class="zone-info">
+          <mat-card-title class="zone-title">
+            <mat-icon class="zone-icon">inventory_2</mat-icon>
+            Precintos Recolectados
+          </mat-card-title>
+          <mat-card-subtitle class="time-subtitle">
+            <mat-icon>schedule</mat-icon>
+            {{ availableSeals.length }} precintos disponibles
+          </mat-card-subtitle>
+        </div>
+        <div class="status-section">
+          <mat-chip-set>
+            <mat-chip class="status-pending">
+              <mat-icon matChipAvatar>pending_actions</mat-icon>
+              LISTOS PARA TRATAMIENTO
+            </mat-chip>
+          </mat-chip-set>
+        </div>
+      </div>
+    </mat-card-header>
+
+    <mat-card-content>
+      <!-- Botones de control -->
+      <div class="control-buttons" style="margin-bottom: 20px;">
+        <button mat-raised-button
+                color="accent"
+                (click)="toggleWeightingMode()"
+                [class.selected]="weightingMode">
+          <mat-icon>{{ weightingMode ? 'scale' : 'fitness_center' }}</mat-icon>
+          {{ weightingMode ? 'Salir del Pesaje' : 'Modo Pesaje' }}
+        </button>
+
+        <button *ngIf="weightingMode && selectedSeals.length > 0"
+                mat-raised-button
+                color="primary"
+                (click)="weightSelectedSeals()">
+          <mat-icon>fitness_center</mat-icon>
+          Pesar Seleccionados ({{ selectedSeals.length }})
+        </button>
+
+        <button *ngIf="!weightingMode && selectedSeals.length > 0"
+                mat-raised-button
+                (click)="clearSelection()">
+          <mat-icon>clear</mat-icon>
+          Limpiar Selección
+        </button>
+      </div>
+
+      <!-- No seals available -->
+      <div *ngIf="availableSeals.length === 0" class="empty-content">
+        <mat-icon class="empty-icon">inventory</mat-icon>
+        <h3>No hay precintos para procesar</h3>
+        <p>Todos los precintos recolectados han sido procesados</p>
+      </div>
+
+      <!-- Seals grid -->
+      <div *ngIf="availableSeals.length > 0" class="seals-grid">
+        <div *ngFor="let seal of availableSeals"
+             class="seal-item"
+             [class.selected]="selectedSeals.includes(seal.sealId)"
+             [class.no-weight]="!hasPeso(seal)"
+             [class.disabled]="!weightingMode && !hasPeso(seal)"
+             (click)="!weightingMode && hasPeso(seal) && toggleSealSelection(seal.sealId)">
+
+          <!-- Checkbox para selección (solo si no está en modo pesaje) -->
+          <mat-checkbox
+            *ngIf="!weightingMode"
+            [checked]="selectedSeals.includes(seal.sealId)"
+            [disabled]="!hasPeso(seal)"
+            (click)="$event.stopPropagation()"
+            (change)="toggleSealSelection(seal.sealId)">
+          </mat-checkbox>
+
+          <div class="seal-info">
+            <div class="seal-qr">
+              <mat-icon>qr_code</mat-icon>
+              <strong>{{ seal.qrContent }}</strong>
+              <mat-icon *ngIf="!hasPeso(seal)" class="warning-icon" matTooltip="Precinto sin pesar">warning</mat-icon>
+            </div>
+            <div class="seal-details">
+              <span class="seal-weight" [class.no-weight]="!hasPeso(seal)">
+                {{ hasPeso(seal) ? seal.peso + ' kg' : 'Sin pesar' }}
+              </span>
+              <span class="seal-generator">{{ seal.generatorEntity?.name || 'Sin generador' }}</span>
+            </div>
+          </div>
+
+          <!-- Botón de pesaje (solo en modo pesaje) -->
+          <button *ngIf="weightingMode"
+                  mat-icon-button
+                  color="primary"
+                  (click)="weightSeal(seal)"
+                  [disabled]="hasPeso(seal)"
+                  matTooltip="{{ hasPeso(seal) ? 'Ya está pesado' : 'Pesar precinto' }}">
+            <mat-icon>{{ hasPeso(seal) ? 'check_circle' : 'fitness_center' }}</mat-icon>
+          </button>
+        </div>
+      </div>
+
+      <!-- Selection summary -->
+      <div *ngIf="selectedSeals.length > 0 && !weightingMode" class="selection-summary">
+        <div class="progress-section">
+          <div class="progress-info">
+            <div class="progress-numbers">
+              <span class="collected">{{ selectedSeals.length }}</span>
+              <span class="separator">/</span>
+              <span class="total">{{ availableSeals.length }}</span>
+              <span class="label">precintos seleccionados</span>
+            </div>
+            <div class="progress-percentage">
+              Peso total: {{ getTotalSelectedWeight() }} kg
+            </div>
+          </div>
+        </div>
+      </div>
+    </mat-card-content>
+
+    <!-- Actions -->
+    <mat-card-actions align="end" *ngIf="selectedSeals.length > 0 && !weightingMode">
+      <div class="action-buttons">
+        <button mat-raised-button
+                color="primary"
+                (click)="addSealsToContainer()"
+                [disabled]="!currentContainer"
+                class="work-button">
+          <mat-icon>add_box</mat-icon>
+          Agregar al Contenedor ({{ selectedSeals.length }})
+        </button>
+      </div>
+    </mat-card-actions>
+  </mat-card>
+
+  <!-- Contenedores Section -->
+  <div class="roadmaps-grid">
+    <mat-card *ngFor="let container of containers"
+              class="roadmap-card"
+              [class.selected-container]="currentContainer?.containerId === container.containerId"
+              [class.container-processing]="container.estado === 'CERRADO'">
+
+      <!-- Card header -->
+      <mat-card-header>
+        <div class="card-header-content">
+          <div class="zone-info">
+            <mat-card-title class="zone-title">
+              <mat-icon class="zone-icon">storage</mat-icon>
+              Contenedor #{{ container.containerId }}
+            </mat-card-title>
+            <mat-card-subtitle class="time-subtitle">
+              <mat-icon>schedule</mat-icon>
+              {{ getSafeDate(container.fechaCreacion) | date:'short' }}
+            </mat-card-subtitle>
+          </div>
+          <div class="status-section">
+            <mat-chip-set>
+              <mat-chip [class]="getContainerStatusClass(container.estado)">
+                <mat-icon matChipAvatar>{{ getContainerStatusIcon(container.estado) }}</mat-icon>
+                {{ container.estado }}
+              </mat-chip>
+            </mat-chip-set>
+          </div>
+        </div>
+      </mat-card-header>
+
+      <mat-card-content>
+        <!-- Progress section -->
+        <div class="progress-section">
+          <div class="progress-info">
+            <div class="progress-numbers">
+              <span class="collected">{{ container.pesoActual || 0 }}</span>
+              <span class="separator">/</span>
+              <span class="total">{{ container.pesoMaximo }}</span>
+              <span class="label">kg utilizados</span>
+            </div>
+            <div class="progress-percentage">
+              {{ getContainerPercentage(container) }}%
+            </div>
+          </div>
+
+          <mat-progress-bar
+            mode="determinate"
+            [value]="getContainerPercentage(container)"
+            class="progress-bar">
+          </mat-progress-bar>
+        </div>
+
+        <mat-divider class="section-divider"></mat-divider>
+
+        <!-- Container details -->
+        <div class="generators-section">
+          <div class="generators-header">
+            <mat-icon>inventory</mat-icon>
+            <span class="generators-count">{{ container.cantidadPrecintos || 0 }} precintos en contenedor</span>
+
+            <!-- Botón para mostrar/ocultar detalles -->
+            <button mat-icon-button
+                    (click)="toggleContainerDetails(container.containerId)"
+                    *ngIf="container.cantidadPrecintos > 0"
+                    matTooltip="Ver detalles de precintos">
+              <mat-icon>{{ showContainerDetails[container.containerId] ? 'expand_less' : 'expand_more' }}</mat-icon>
+            </button>
+          </div>
+
+          <div class="generators-status">
+            <div class="status-item">
+              <mat-icon class="status-icon" [class]="getContainerStatusIconClass(container.estado)">
+                {{ getContainerStatusIcon(container.estado) }}
+              </mat-icon>
+              <span>{{ getContainerStatusDescription(container.estado) }}</span>
+            </div>
+
+            <div class="status-item" *ngIf="getSafeDate(container.fechaCierre)">
+              <mat-icon class="status-icon completed">event</mat-icon>
+              <span>Cerrado: {{ getSafeDate(container.fechaCierre) | date:'short' }}</span>
+            </div>
+
+            <div class="status-item" *ngIf="container.estado === 'ABIERTO' && currentContainer?.containerId === container.containerId">
+              <mat-icon class="status-icon" style="color: #4caf50;">radio_button_checked</mat-icon>
+              <span style="color: #4caf50; font-weight: 500;">Contenedor Activo</span>
+            </div>
+
+            <!-- Indicador de reutilización -->
+            <div class="status-item" *ngIf="container.estado === 'ABIERTO' && (container.pesoActual || 0) === 0">
+              <span class="container-reusable-indicator">
+                <mat-icon>recycling</mat-icon>
+                Reutilizable
+              </span>
+            </div>
+          </div>
+
+          <!-- SECCIÓN: Detalles de precintos en el contenedor -->
+          <div *ngIf="showContainerDetails[container.containerId] && container.seals && container.seals.length > 0"
+               class="container-seals-section">
+
+            <mat-divider style="margin: 16px 0;"></mat-divider>
+
+            <div class="seals-header">
+              <h4>Precintos en el contenedor:</h4>
+              <div class="seals-header-actions">
+                <button *ngIf="container.estado === 'ABIERTO' && selectedSealsToRemove.length > 0"
+                        mat-button
+                        color="warn"
+                        (click)="removeSealsFromContainer(container.containerId)">
+                  <mat-icon>remove</mat-icon>
+                  Remover ({{ selectedSealsToRemove.length }})
+                </button>
+                <button *ngIf="selectedSealsToRemove.length > 0"
+                        mat-stroked-button
+                        (click)="clearRemovalSelection()">
+                  <mat-icon>clear</mat-icon>
+                  Limpiar
+                </button>
+              </div>
+            </div>
+
+            <div class="container-seals-grid">
+              <div *ngFor="let seal of container.seals"
+                   class="container-seal-item"
+                   [class.selected-for-removal]="selectedSealsToRemove.includes(seal.sealId)">
+
+                <mat-checkbox *ngIf="container.estado === 'ABIERTO'"
+                              [checked]="selectedSealsToRemove.includes(seal.sealId)"
+                              (change)="toggleSealRemovalSelection(seal.sealId)">
+                </mat-checkbox>
+
+                <div class="seal-info">
+                  <div class="seal-qr">
+                    <mat-icon>qr_code</mat-icon>
+                    <strong>{{ seal.qrContent }}</strong>
+                  </div>
+                  <div class="seal-details">
+                    <span class="seal-weight">{{ seal.peso }} kg</span>
+                    <span class="seal-generator">{{ seal.generatorEntity?.name }}</span>
+                  </div>
+                </div>
+
+                <mat-chip class="seal-status-chip">{{ seal.state }}</mat-chip>
+              </div>
+            </div>
+
+            <div *ngIf="selectedSealsToRemove.length > 0" class="removal-summary">
+              <div class="removal-info">
+                <strong>{{ selectedSealsToRemove.length }}</strong> precintos seleccionados para remover
+                <span class="removal-weight">
+               ({{ getTotalRemovalWeight(container.seals) }} kg)
+            </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </mat-card-content>
+
+      <mat-card-actions align="end">
+        <div class="action-buttons">
+          <!-- Botón para contenedor ABIERTO -->
+          <button *ngIf="container.estado === 'ABIERTO'"
+                  mat-raised-button
+                  color="accent"
+                  (click)="setCurrentContainer(container)"
+                  [class.selected]="currentContainer?.containerId === container.containerId"
+                  class="route-button">
+            <mat-icon>{{ currentContainer?.containerId === container.containerId ? 'radio_button_checked' : 'radio_button_unchecked' }}</mat-icon>
+            {{ currentContainer?.containerId === container.containerId ? 'Seleccionado' : 'Seleccionar' }}
+          </button>
+
+          <button *ngIf="container.estado === 'ABIERTO'"
+                  mat-raised-button
+                  color="primary"
+                  (click)="closeContainer(container.containerId)"
+                  [disabled]="(container.pesoActual || 0) === 0"
+                  class="work-button"
+                  matTooltip="{{ (container.pesoActual || 0) === 0 ? 'Contenedor vacío' : 'Cerrar para tratamiento' }}">
+            <mat-icon>lock</mat-icon>
+            Cerrar Contenedor
+          </button>
+
+          <!-- Botón para contenedor CERRADO -->
+          <button *ngIf="container.estado === 'CERRADO'"
+                  mat-raised-button
+                  color="primary"
+                  (click)="processContainerTreatment(container.containerId)"
+                  class="work-button">
+            <mat-icon>recycling</mat-icon>
+            Procesar Tratamiento
+          </button>
+        </div>
+      </mat-card-actions>
+    </mat-card>
+
+    <!-- No containers -->
+    <mat-card *ngIf="containers.length === 0" class="roadmap-card">
+      <mat-card-content>
+        <div class="empty-content">
+          <mat-icon class="empty-icon">storage</mat-icon>
+          <h3>No hay contenedores</h3>
+          <p>Crea un nuevo contenedor para comenzar el tratamiento</p>
+          <button mat-raised-button color="primary" (click)="createNewContainer()" class="work-button">
+            <mat-icon>add</mat-icon>
+            Crear Contenedor
+          </button>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <!-- Floating Action Button -->
+  <button mat-fab
+          color="primary"
+          class="fab-button"
+          (click)="createNewContainer()"
+          matTooltip="Crear nuevo contenedor">
+    <mat-icon>add</mat-icon>
+  </button>
+
+  <!-- Estadísticas rápidas -->
+  <div class="stats-bar" *ngIf="containers.length > 0 || availableSeals.length > 0">
+    <mat-card class="stats-card">
+      <div class="stats-content">
+        <div class="stat-item">
+          <mat-icon>inventory_2</mat-icon>
+          <span class="stat-number">{{ availableSeals.length }}</span>
+          <span class="stat-label">Disponibles</span>
+        </div>
+        <div class="stat-item">
+          <mat-icon>storage</mat-icon>
+          <span class="stat-number">{{ getOpenContainersCount() }}</span>
+          <span class="stat-label">Abiertos</span>
+        </div>
+        <div class="stat-item">
+          <mat-icon>science</mat-icon>
+          <span class="stat-number">{{ getClosedContainersCount() }}</span>
+          <span class="stat-label">En Tratamiento</span>
+        </div>
+      </div>
+    </mat-card>
+  </div>
+</div>

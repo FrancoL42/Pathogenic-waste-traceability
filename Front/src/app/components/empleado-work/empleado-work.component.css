@@ -1,0 +1,806 @@
+/* Header VEOLIA style */
+.veolia-header {
+  background: linear-gradient(135deg, #1e88e5 0%, #1565c0 100%);
+  padding: 20px 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: white;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.header-left {
+  flex: 1;
+}
+
+.veolia-brand h1 {
+  font-size: 2.5rem;
+  font-weight: bold;
+  margin: 0;
+  letter-spacing: 2px;
+}
+
+.tagline {
+  font-size: 0.9rem;
+  margin: 0;
+  opacity: 0.9;
+  font-style: italic;
+}
+
+.header-center {
+  flex: 2;
+  text-align: center;
+}
+
+.system-title {
+  font-size: 1.8rem;
+  font-weight: 500;
+  margin: 0 0 5px 0;
+}
+
+.panel-subtitle {
+  font-size: 1rem;
+  margin: 0;
+  opacity: 0.8;
+}
+
+.header-right {
+  flex: 1;
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+}
+
+.header-right button {
+  min-width: 120px;
+}
+
+/* Green divider */
+.green-divider {
+  height: 4px;
+  background: linear-gradient(90deg, #4caf50 0%, #81c784 50%, #4caf50 100%);
+}
+
+/* 🆕 NUEVOS ESTILOS PARA ESTADO DE UBICACIÓN */
+
+/* Barra de estado de ubicación */
+.location-status-bar {
+  background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
+  border-bottom: 1px solid #ffcc02;
+  padding: 12px 0;
+  animation: slideInFromTop 0.5s ease-out;
+}
+
+@keyframes slideInFromTop {
+  from {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.location-status-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+}
+
+.location-warning,
+.location-fallback {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #e65100;
+  font-weight: 500;
+}
+
+.location-warning mat-icon,
+.location-fallback mat-icon {
+  color: #ff9800;
+  font-size: 20px;
+  width: 20px;
+  height: 20px;
+}
+
+.warning-text,
+.fallback-text {
+  font-size: 0.9rem;
+}
+
+.retry-button,
+.enable-location-button {
+  min-width: 120px;
+  height: 32px;
+  font-size: 0.8rem;
+  border-color: #ff9800 !important;
+  color: #e65100 !important;
+}
+
+.retry-button:hover,
+.enable-location-button:hover {
+  background-color: rgba(255, 152, 0, 0.04) !important;
+}
+
+/* Container */
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+/* Loading */
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 20px;
+}
+
+.loading-text {
+  margin-top: 20px;
+  font-size: 1.1rem;
+  color: #666;
+}
+
+/* Error */
+.error-card {
+  margin: 40px auto;
+  max-width: 500px;
+}
+
+.error-content {
+  text-align: center;
+  padding: 20px;
+}
+
+.error-icon {
+  font-size: 3rem;
+  height: 3rem;
+  width: 3rem;
+  margin-bottom: 16px;
+}
+
+.error-content h3 {
+  color: #f44336;
+  margin-bottom: 20px;
+}
+
+/* Route header */
+.route-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 40px;
+  margin-bottom: 32px;
+  padding: 24px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.route-info h2 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: #1565c0;
+  margin: 0 0 12px 0;
+}
+
+.route-details {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 1rem;
+  color: #666;
+  margin: 0 0 8px 0;
+}
+
+.employee-name {
+  font-size: 1rem;
+  color: #333;
+  font-weight: 500;
+  margin: 0;
+}
+
+/* 🆕 Información de ubicación actual */
+.current-location-info {
+  margin-top: 12px;
+}
+
+.location-status {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.85rem;
+  margin: 0;
+}
+
+.location-accurate {
+  color: #4caf50 !important;
+}
+
+.location-approximate {
+  color: #ff9800 !important;
+}
+
+.accurate-text {
+  color: #4caf50;
+  font-weight: 500;
+}
+
+.approximate-text {
+  color: #ff9800;
+  font-weight: 500;
+}
+
+/* Total progress */
+.total-progress {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  min-width: 200px;
+}
+
+.progress-circle {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background: conic-gradient(#1565c0 var(--progress, 0%), #e0e0e0 0%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.progress-circle::before {
+  content: '';
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: white;
+  position: absolute;
+}
+
+.progress-circle.completed {
+  background: conic-gradient(#4caf50 100%, #4caf50 0%);
+}
+
+.progress-text {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+}
+
+.percentage {
+  display: block;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1565c0;
+}
+
+.progress-circle.completed .percentage {
+  color: #4caf50;
+}
+
+.label {
+  font-size: 0.8rem;
+  color: #666;
+}
+
+.progress-details {
+  text-align: center;
+  width: 100%;
+}
+
+.progress-details p {
+  margin: 0 0 8px 0;
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.total-progress-bar {
+  height: 6px !important;
+  border-radius: 3px !important;
+  width: 200px;
+}
+
+.section-divider {
+  margin: 32px 0;
+}
+
+/* Section title */
+.section-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: #333;
+  margin: 0 0 24px 0;
+}
+
+/* Generators grid */
+.generators-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 24px;
+}
+
+.generator-card {
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  border-radius: 12px !important;
+  overflow: hidden;
+  border-left: 4px solid transparent;
+}
+
+.generator-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15) !important;
+}
+
+.generator-card.status-pending {
+  border-left-color: #f44336;
+}
+
+.generator-card.status-in-progress {
+  border-left-color: #ff9800;
+}
+
+.generator-card.status-completed {
+  border-left-color: #4caf50;
+}
+
+/* Generator header */
+.generator-header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  width: 100%;
+}
+
+.generator-info {
+  flex: 1;
+}
+
+.generator-name {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 1.3rem !important;
+  font-weight: 600 !important;
+  color: #1565c0 !important;
+  margin-bottom: 8px !important;
+}
+
+.generator-icon {
+  color: #1565c0;
+}
+
+.generator-address {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.9rem !important;
+  color: #666 !important;
+}
+
+.generator-status {
+  flex-shrink: 0;
+}
+
+/* Status chips para generadores */
+.mat-mdc-chip.status-pending {
+  background-color: #ffebee !important;
+  color: #c62828 !important;
+}
+
+.mat-mdc-chip.status-in-progress {
+  background-color: #fff3e0 !important;
+  color: #ef6c00 !important;
+}
+
+.mat-mdc-chip.status-completed {
+  background-color: #e8f5e8 !important;
+  color: #2e7d32 !important;
+}
+
+/* Generator progress */
+.generator-progress {
+  margin: 20px 0;
+}
+
+.progress-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.progress-numbers {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+}
+
+.collected {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #1565c0;
+}
+
+.separator {
+  font-size: 1.1rem;
+  color: #999;
+}
+
+.total {
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: #666;
+}
+
+.label {
+  font-size: 0.9rem;
+  color: #666;
+  margin-left: 6px;
+}
+
+.progress-percentage {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #1565c0;
+}
+
+.generator-progress-bar {
+  height: 6px !important;
+  border-radius: 3px !important;
+}
+
+/* Seals summary */
+.seals-summary {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid #e0e0e0;
+}
+
+.seals-info {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0 0 12px 0;
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.seals-status {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.seal-status {
+  font-size: 0.8rem;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-weight: 500;
+}
+
+.seal-status.ocupado {
+  background: #ffebee;
+  color: #c62828;
+}
+
+.seal-status.recolectado {
+  background: #e8f5e8;
+  color: #2e7d32;
+}
+
+/* Botones de acciones del generador */
+.generator-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  padding: 16px !important;
+}
+
+.map-button {
+  min-width: 130px;
+  height: 40px;
+  font-weight: 500;
+  border-color: #1565c0 !important;
+  color: #1565c0 !important;
+}
+
+.map-button:hover:not(:disabled) {
+  background-color: rgba(21, 101, 192, 0.04) !important;
+}
+
+.map-button:disabled {
+  border-color: #ccc !important;
+  color: #999 !important;
+}
+
+.scan-button {
+  min-width: 140px;
+  height: 40px;
+  font-weight: 500;
+}
+
+/* Panel de navegación */
+.navigation-panel {
+  margin: 32px 0;
+}
+
+.navigation-card {
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%) !important;
+  border: 1px solid #dee2e6;
+}
+
+.navigation-card mat-card-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #1565c0 !important;
+  font-size: 1.2rem !important;
+}
+
+.navigation-location-warning {
+  color: #ff9800;
+  font-size: 0.8rem;
+  font-style: italic;
+}
+
+/* 🆕 Información del generador más cercano */
+.nearest-generator-info {
+  background: linear-gradient(135deg, #e3f2fd 0%, #e1f5fe 100%);
+  padding: 16px;
+  border-radius: 8px;
+  margin-bottom: 16px;
+  border-left: 4px solid #1565c0;
+}
+
+.nearest-generator-info h4 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 8px 0;
+  color: #1565c0;
+  font-size: 1rem;
+}
+
+.nearest-stats {
+  display: flex;
+  gap: 20px;
+}
+
+.distance,
+.time {
+  font-size: 0.9rem;
+  color: #666;
+  font-weight: 500;
+}
+
+.navigation-stats {
+  display: flex;
+  gap: 24px;
+  margin: 16px 0;
+  flex-wrap: wrap;
+}
+
+.stat-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #666;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.stat-item mat-icon {
+  color: #1565c0;
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+}
+
+/* Completion message */
+.completion-message {
+  margin: 40px 0;
+}
+
+.completion-card {
+  max-width: 600px;
+  margin: 0 auto;
+  background: linear-gradient(135deg, #e8f5e8 0%, #c8e6c9 100%) !important;
+  border: 2px solid #4caf50;
+}
+
+.completion-content {
+  text-align: center;
+  padding: 40px 20px;
+}
+
+.completion-icon {
+  font-size: 4rem !important;
+  height: 4rem !important;
+  width: 4rem !important;
+  color: #4caf50;
+  margin-bottom: 20px;
+}
+
+.completion-content h3 {
+  color: #2e7d32;
+  margin-bottom: 16px;
+  font-size: 1.5rem;
+}
+
+.completion-content p {
+  color: #388e3c;
+  margin-bottom: 24px;
+  font-size: 1.1rem;
+}
+
+/* Estilos para snackbars */
+.success-snackbar {
+  background-color: #4caf50 !important;
+  color: white !important;
+}
+
+.error-snackbar {
+  background-color: #f44336 !important;
+  color: white !important;
+}
+
+.warn-snackbar {
+  background-color: #ff9800 !important;
+  color: white !important;
+}
+
+.info-snackbar {
+  background-color: #2196f3 !important;
+  color: white !important;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .veolia-header {
+    flex-direction: column;
+    gap: 16px;
+    padding: 16px 20px;
+  }
+
+  .header-center {
+    text-align: center;
+  }
+
+  .header-right {
+    justify-content: center;
+  }
+
+  .container {
+    padding: 16px;
+  }
+
+  .location-status-content {
+    flex-direction: column;
+    gap: 12px;
+    text-align: center;
+  }
+
+  .location-warning,
+  .location-fallback {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .route-header {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .total-progress {
+    align-self: stretch;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+  .generators-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .generator-header-content {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .progress-info {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .seals-status {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    gap: 8px;
+  }
+
+  /* Responsive para botones */
+  .generator-actions {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .map-button,
+  .scan-button {
+    width: 100%;
+    min-width: auto;
+  }
+
+  /* Responsive para navegación */
+  .navigation-stats {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .nearest-stats {
+    flex-direction: column;
+    gap: 8px;
+  }
+}
+
+@media (max-width: 480px) {
+  .veolia-brand h1 {
+    font-size: 2rem;
+  }
+
+  .system-title {
+    font-size: 1.4rem;
+  }
+
+  .route-info h2 {
+    font-size: 1.4rem;
+  }
+
+  .generator-card {
+    margin: 0 -8px;
+  }
+
+  .total-progress {
+    flex-direction: column;
+  }
+
+  .progress-circle {
+    width: 80px;
+    height: 80px;
+  }
+
+  .progress-circle::before {
+    width: 64px;
+    height: 64px;
+  }
+
+  .percentage {
+    font-size: 1.2rem !important;
+  }
+
+  .location-status-bar {
+    padding: 8px 0;
+  }
+
+  .retry-button,
+  .enable-location-button {
+    min-width: 100px;
+    font-size: 0.75rem;
+  }
+}

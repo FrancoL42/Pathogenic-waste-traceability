@@ -1,0 +1,445 @@
+<div class="admin-container">
+  <!-- Header con estilo Veolia -->
+  <header class="veolia-header">
+    <div class="header-content">
+      <div class="veolia-logo-section">
+        <div class="veolia-logo">VEOLIA</div>
+        <div class="veolia-tagline">Resourcing the world</div>
+      </div>
+      <div class="header-title">
+        <h1>Sistema de Gestión de Residuos</h1>
+        <p>Panel de Administración</p>
+      </div>
+    </div>
+  </header>
+
+  <!-- 🆕 Navegación principal mejorada con todos los botones organizados -->
+  <!-- 🔥 NAVEGACIÓN HORIZONTAL COMPACTA - OCUPA POCO ESPACIO -->
+  <nav class="main-navigation">
+    <div class="nav-content">
+
+      <!-- 1. BOTÓN PRINCIPAL - Crear Hoja de Ruta -->
+      <button mat-flat-button class="nav-button primary-action" (click)="abrirModal()">
+        <mat-icon>route</mat-icon>
+        <span>Crear Hoja de Ruta</span>
+      </button>
+
+      <!-- 2. REGISTRAR VEHÍCULO -->
+      <button mat-flat-button class="nav-button secondary-action" (click)="abrirModalVehiculo()">
+        <mat-icon>local_shipping</mat-icon>
+        <span>Registrar Vehículo</span>
+      </button>
+
+      <!-- 3. REGISTRAR EMPLEADO -->
+      <button mat-flat-button class="nav-button secondary-action" (click)="abrirModalEmpleado()">
+        <mat-icon>person_add</mat-icon>
+        <span>Registrar Empleado</span>
+      </button>
+
+      <!-- 4. REPORTE POR ZONA -->
+      <button mat-flat-button class="nav-button report-action" (click)="irAReporteZona()">
+        <mat-icon>map</mat-icon>
+        <span>Reporte por Zona</span>
+      </button>
+
+      <!-- 5. REPORTE DE VENTAS -->
+      <button mat-flat-button class="nav-button report-action" (click)="irAReporteVenta()">
+        <mat-icon>assessment</mat-icon>
+        <span>Reporte de Ventas</span>
+      </button>
+
+      <!-- 6. REPORTE DE TRATAMIENTO -->
+      <button mat-flat-button class="nav-button report-action" (click)="irAReporteTratamiento()">
+        <mat-icon>science</mat-icon>
+        <span>Reporte de Tratamiento</span>
+      </button>
+
+    </div>
+  </nav>
+
+  <!-- Contenido principal con cards -->
+  <main class="main-content">
+    <div class="content-grid">
+
+      <!-- Card de Stock de Bolsas -->
+      <mat-card class="info-card stock-card" *ngIf="stockInfo.length > 0">
+        <mat-card-header>
+          <div mat-card-avatar class="card-avatar stock">
+            <mat-icon>inventory</mat-icon>
+          </div>
+          <mat-card-title>Control de Stock</mat-card-title>
+          <mat-card-subtitle>
+            {{ getLowStockCount() > 0 ? 'Stock bajo detectado' : 'Stock normal' }}
+          </mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="stock-list">
+            <div *ngFor="let stock of stockInfo" class="stock-item"
+                 [class.low-stock]="stock.lowStock">
+              <div class="stock-info">
+                <div class="stock-details">
+                  <span class="stock-size">Bolsas {{ stock.size }}</span>
+                  <span class="stock-count"
+                        [class.critical]="stock.lowStock">
+                    {{ stock.currentStock }} unidades
+                  </span>
+                  <span class="stock-price">${{ stock.price | number:'1.0-0' }} c/u</span>
+                </div>
+                <div class="stock-actions" *ngIf="stock.lowStock">
+                  <button mat-raised-button
+                          class="restock-btn"
+                          (click)="solicitarReposicion(stock.bagId, stock.size)">
+                    <mat-icon>email</mat-icon>
+                    Solicitar Reposición
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- Card de Generadores Activos -->
+      <mat-card class="info-card active-generators">
+        <mat-card-header>
+          <div mat-card-avatar class="card-avatar active">
+            <mat-icon>factory</mat-icon>
+          </div>
+          <mat-card-title>Generadores Activos</mat-card-title>
+          <mat-card-subtitle>{{ generadores.length }} generadores operativos</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="generators-list">
+            <div *ngFor="let gen of generadores" class="generator-item">
+              <div class="generator-info">
+                <mat-icon class="status-icon active">check_circle</mat-icon>
+                <span class="generator-name">{{ gen.name }}</span>
+              </div>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- Card de Solicitudes Pendientes -->
+      <mat-card class="info-card pending-requests">
+        <mat-card-header>
+          <div mat-card-avatar class="card-avatar pending">
+            <mat-icon>pending_actions</mat-icon>
+          </div>
+          <mat-card-title>Solicitudes Pendientes</mat-card-title>
+          <mat-card-subtitle>{{ solicitudes.length }} solicitudes por revisar</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="requests-list">
+            <div *ngFor="let solicitud of solicitudes" class="request-item">
+              <div class="request-info">
+                <div class="request-details">
+                  <span class="request-name">{{ solicitud.name }}</span>
+                  <span class="request-status">{{ solicitud.state }}</span>
+                </div>
+                <button mat-raised-button color="primary"
+                        class="approve-btn"
+                        (click)="aprobarSolicitud(solicitud.generatorId)">
+                  <mat-icon>check</mat-icon>
+                  Aprobar
+                </button>
+              </div>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </main>
+
+  <!-- Modal para crear hoja de ruta con diseño Veolia -->
+  <ng-template #dialogTemplate>
+    <div class="veolia-modal-header">
+      <h2 mat-dialog-title>
+        <mat-icon class="modal-icon">route</mat-icon>
+        Crear Hoja de Ruta
+      </h2>
+      <p class="modal-subtitle">Configure los detalles de la nueva ruta de recolección</p>
+    </div>
+
+    <mat-dialog-content [formGroup]="rutaForm" class="veolia-dialog-content">
+      <div class="form-section">
+        <h3 class="section-title">
+          <mat-icon>settings</mat-icon>
+          Configuración Básica
+        </h3>
+
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Vehículo</mat-label>
+            <mat-select formControlName="vehiculo" required>
+              <mat-option *ngFor="let v of vehiculos" [value]="v">
+                <div class="vehicle-option">
+                  <mat-icon>local_shipping</mat-icon>
+                  <span>{{v.type}} ({{ v.patent}})</span>
+                </div>
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="rutaForm.get('vehiculo')?.hasError('required')">
+              Debe seleccionar un vehículo
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Operario</mat-label>
+            <mat-select formControlName="operario" required>
+              <mat-option *ngFor="let o of operarios" [value]="o">
+                <div class="operator-option">
+                  <mat-icon>person</mat-icon>
+                  <span>{{ o.name }}</span>
+                </div>
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="rutaForm.get('operario')?.hasError('required')">
+              Debe seleccionar un operario
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <mat-form-field appearance="outline" class="form-field full-width">
+          <mat-label>Zona de Recolección</mat-label>
+          <mat-select formControlName="zona"
+                      (selectionChange)="onZonaSeleccionada($event.value)"
+                      required>
+            <mat-option *ngFor="let zona of zonas" [value]="zona.name">
+              <div class="zone-option">
+                <mat-icon>location_on</mat-icon>
+                <span>{{ zona.name }}</span>
+              </div>
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="rutaForm.get('zona')?.hasError('required')">
+            Debe seleccionar una zona
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="form-section">
+        <h3 class="section-title">
+          <mat-icon>schedule</mat-icon>
+          Programación
+        </h3>
+
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Fecha de Recolección</mat-label>
+            <input matInput
+                   [matDatepicker]="picker"
+                   formControlName="fechaRecoleccion"
+                   [min]="minDate"
+                   [matDatepickerFilter]="dateFilter"
+                   required>
+            <mat-hint>Solo días hábiles</mat-hint>
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+            <mat-error *ngIf="rutaForm.get('fechaRecoleccion')?.hasError('required')">
+              Debe seleccionar una fecha
+            </mat-error>
+            <mat-error *ngIf="rutaForm.get('fechaRecoleccion')?.hasError('fechaAnterior')">
+              La fecha no puede ser anterior al día de hoy
+            </mat-error>
+            <mat-error *ngIf="rutaForm.get('fechaRecoleccion')?.hasError('noEsDiaHabil')">
+              Solo se permiten días hábiles (Lunes a Viernes)
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Hora de Salida</mat-label>
+            <input matInput type="time" formControlName="horaSalida" required>
+            <mat-error *ngIf="rutaForm.get('horaSalida')?.hasError('required')">
+              Debe especificar la hora de salida
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <!-- Sección de Pedidos con diseño mejorado -->
+      <div class="form-section pedidos-section" *ngIf="pedidos.length > 0">
+        <h3 class="section-title">
+          <mat-icon>assignment</mat-icon>
+          Pedidos de Retiro
+          <span class="pedidos-count">({{ pedidos.length }} disponibles)</span>
+        </h3>
+
+        <div class="pedidos-container-veolia">
+          <mat-selection-list
+            formControlName="pedidos"
+            [multiple]="true"
+            (selectionChange)="onPedidosSelectionChange($event)"
+            class="pedidos-list-veolia">
+
+            <mat-list-option
+              *ngFor="let pedido of pedidos"
+              [value]="pedido"
+              [disabled]="pedido.state !== 'PENDIENTE'"
+              class="pedido-option-veolia">
+
+              <div class="pedido-card">
+                <div class="pedido-header">
+                  <div class="pedido-info">
+                    <h4 class="generator-name">{{ pedido.generador }}</h4>
+                    <p class="generator-address">{{ pedido.address }}</p>
+                  </div>
+                  <div class="pedido-status">
+                    <span class="status-badge"
+                          [class]="'status-' + pedido.state.toLowerCase()">
+                      {{ pedido.state }}
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+            </mat-list-option>
+          </mat-selection-list>
+        </div>
+        <mat-error *ngIf="rutaForm.get('pedidos')?.hasError('required')" class="pedidos-error">
+          <mat-icon>error</mat-icon>
+          Debe seleccionar al menos un pedido de retiro
+        </mat-error>
+      </div>
+
+      <!-- Mensajes informativos -->
+      <div *ngIf="pedidos.length === 0 && zonaSeleccionada" class="info-message no-pedidos">
+        <mat-icon>info</mat-icon>
+        <div>
+          <h4>No hay pedidos disponibles</h4>
+          <p>No se encontraron pedidos de retiro en la zona seleccionada.</p>
+        </div>
+      </div>
+
+      <div *ngIf="!zonaSeleccionada" class="info-message select-zone">
+        <mat-icon>location_on</mat-icon>
+        <div>
+          <h4>Seleccione una zona</h4>
+          <p>Elija una zona de recolección para ver los pedidos disponibles.</p>
+        </div>
+      </div>
+
+    </mat-dialog-content>
+
+    <mat-dialog-actions class="veolia-dialog-actions">
+      <button mat-button class="cancel-button" (click)="dialog.closeAll()">
+        <mat-icon>close</mat-icon>
+        Cancelar
+      </button>
+      <button mat-raised-button class="create-button" (click)="crearRuta()">
+        <mat-icon>add</mat-icon>
+        Crear Hoja de Ruta
+      </button>
+    </mat-dialog-actions>
+  </ng-template>
+
+  <!-- Modal para registrar vehículo -->
+  <ng-template #dialogVehiculo>
+    <div class="veolia-modal-header">
+      <h2 mat-dialog-title>
+        <mat-icon class="modal-icon">local_shipping</mat-icon>
+        Registrar Vehículo
+      </h2>
+      <p class="modal-subtitle">Ingrese los datos del nuevo vehículo</p>
+    </div>
+    <mat-dialog-content [formGroup]="vehiculoForm" class="veolia-dialog-content">
+      <div class="form-section">
+        <h3 class="section-title">
+          <mat-icon>directions_car</mat-icon>
+          Información del Vehículo
+        </h3>
+
+        <mat-form-field appearance="outline" class="form-field full-width">
+          <mat-label>Patente</mat-label>
+          <input matInput formControlName="patent" required placeholder="Ej: ABC123">
+          <mat-error *ngIf="vehiculoForm.get('patent')?.hasError('required')">
+            La patente es requerida
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="form-field full-width">
+          <mat-label>Tipo de Vehículo</mat-label>
+          <input matInput formControlName="type" required placeholder="Ej: Camión recolector">
+          <mat-error *ngIf="vehiculoForm.get('type')?.hasError('required')">
+            El tipo es requerido
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </mat-dialog-content>
+
+    <mat-dialog-actions class="veolia-dialog-actions">
+      <button mat-button class="cancel-button" (click)="dialog.closeAll()">
+        <mat-icon>close</mat-icon>
+        Cancelar
+      </button>
+      <button mat-raised-button class="create-button" (click)="registrarVehiculo()">
+        <mat-icon>add</mat-icon>
+        Registrar
+      </button>
+    </mat-dialog-actions>
+  </ng-template>
+
+  <!-- Modal para registrar empleado -->
+  <ng-template #dialogEmpleado>
+    <div class="veolia-modal-header">
+      <h2 mat-dialog-title>
+        <mat-icon class="modal-icon">person_add</mat-icon>
+        Registrar Empleado
+      </h2>
+      <p class="modal-subtitle">Ingrese los datos del nuevo empleado</p>
+    </div>
+    <mat-dialog-content [formGroup]="empleadoForm" class="veolia-dialog-content">
+      <div class="form-section">
+        <h3 class="section-title">
+          <mat-icon>badge</mat-icon>
+          Información Personal
+        </h3>
+
+        <mat-form-field appearance="outline" class="form-field full-width">
+          <mat-label>Nombre Completo</mat-label>
+          <input matInput formControlName="name" required placeholder="Ej: Juan Pérez">
+          <mat-error *ngIf="empleadoForm.get('name')?.hasError('required')">
+            El nombre es requerido
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="form-field full-width">
+          <mat-label>Correo Electrónico</mat-label>
+          <input matInput type="email" formControlName="email" required placeholder="juan.perez@veolia.com">
+          <mat-error *ngIf="empleadoForm.get('email')?.hasError('required')">
+            El email es requerido
+          </mat-error>
+          <mat-error *ngIf="empleadoForm.get('email')?.hasError('email')">
+            Debe ser un email válido
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="form-field full-width">
+          <mat-label>Tipo de Empleado</mat-label>
+          <mat-select formControlName="type" required>
+            <mat-option *ngFor="let tipo of tipos" [value]="tipo">
+              <div class="vehicle-option">
+                <mat-icon>engineering</mat-icon>
+                <span>{{ tipo }}</span>
+              </div>
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="empleadoForm.get('type')?.hasError('required')">
+            El tipo es requerido
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </mat-dialog-content>
+
+    <mat-dialog-actions class="veolia-dialog-actions">
+      <button mat-button class="cancel-button" (click)="dialog.closeAll()">
+        <mat-icon>close</mat-icon>
+        Cancelar
+      </button>
+      <button mat-raised-button class="create-button" (click)="registrarEmpleado()">
+        <mat-icon>add</mat-icon>
+        Registrar
+      </button>
+    </mat-dialog-actions>
+  </ng-template>
+</div>

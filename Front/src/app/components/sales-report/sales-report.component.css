@@ -1,0 +1,928 @@
+/* Variables CSS */
+:root {
+  --veolia-blue-primary: #0066CC;
+  --veolia-blue-dark: #004A99;
+  --veolia-blue-light: #E6F3FF;
+  --veolia-green-primary: #00A650;
+  --veolia-green-dark: #007A3D;
+  --veolia-green-light: #E6F7ED;
+  --veolia-orange: #FF6600;
+  --veolia-teal: #00B5B8;
+  --veolia-purple: #6B46C1;
+  --veolia-gray-50: #F8F9FA;
+  --veolia-gray-100: #E9ECEF;
+  --veolia-gray-200: #DEE2E6;
+  --veolia-gray-300: #CED4DA;
+  --veolia-gray-400: #ADB5BD;
+  --veolia-gray-500: #6C757D;
+  --veolia-gray-600: #495057;
+  --veolia-gray-700: #343A40;
+  --veolia-gray-800: #1F2937;
+  --veolia-error: #DC3545;
+  --sales-green: #22C55E;
+  --sales-red: #EF4444;
+  --sales-blue: #3B82F6;
+  --sales-amber: #F59E0B;
+  --sales-purple: #8B5CF6;
+  --sales-indigo: #6366F1;
+}
+
+/* Container principal */
+.sales-report-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, var(--veolia-gray-50) 0%, var(--veolia-blue-light) 100%);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* ===============================================
+   HEADER AZUL VEOLIA - COMPACTO
+   =============================================== */
+.report-header {
+  background: linear-gradient(135deg, #0066CC 0%, #004A99 100%) !important;
+  color: white !important;
+  padding: 0.75rem 0 !important;
+  box-shadow: 0 4px 12px rgba(0, 102, 204, 0.15) !important;
+  margin: 0 0 1rem 0 !important;
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  z-index: 10;
+}
+
+.report-header::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -10%;
+  width: 200px;
+  height: 200px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  transform: rotate(45deg);
+}
+
+.header-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+  z-index: 1;
+}
+
+.header-title {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.header-icon {
+  font-size: 1.5rem !important;
+  background: rgba(255, 255, 255, 0.2);
+  padding: 0.4rem;
+  border-radius: 8px;
+  width: 36px !important;
+  height: 36px !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.header-title h1 {
+  margin: 0;
+  font-size: 1.4rem;
+  font-weight: 600;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+  color: white !important;
+}
+
+.header-title p {
+  margin: 0.15rem 0 0 0;
+  opacity: 0.9;
+  font-size: 0.8rem;
+  color: white !important;
+}
+
+.back-button {
+  background: rgba(255, 255, 255, 0.1) !important;
+  color: white !important;
+  border: 1px solid rgba(255, 255, 255, 0.3) !important;
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+  padding: 0.5rem 1rem !important;
+  border-radius: 8px !important;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.back-button:hover {
+  background: rgba(255, 255, 255, 0.2) !important;
+  transform: translateY(-1px);
+}
+
+/* ===============================================
+   MAIN CONTENT - COMPACTO
+   =============================================== */
+.main-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1.5rem 1rem 1.5rem;
+}
+
+/* ===============================================
+   FILTROS - COMPACTOS
+   =============================================== */
+.filters-card {
+  margin-bottom: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  border: none;
+  overflow: hidden;
+  background: white !important;
+}
+
+.filters-card mat-card-header {
+  background: linear-gradient(135deg, #0066CC, #004A99) !important;
+  color: white !important;
+  padding: 0.75rem 1rem !important;
+}
+
+.filters-card mat-card-title {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: white !important;
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.filters-card mat-card-title mat-icon {
+  color: white !important;
+  background: rgba(255, 255, 255, 0.2);
+  padding: 0.2rem;
+  border-radius: 4px;
+  font-size: 1rem !important;
+  width: 1rem !important;
+  height: 1rem !important;
+}
+
+.filters-card mat-card-content {
+  padding: 1rem !important;
+  background: white;
+}
+
+.filters-form {
+  width: 100%;
+}
+
+.filters-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.filters-row mat-form-field {
+  font-size: 0.85rem;
+}
+
+.filters-actions {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: flex-end;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--veolia-gray-200);
+}
+
+.filters-actions button {
+  padding: 0.4rem 1rem;
+  font-weight: 500;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.8rem;
+  transition: all 0.3s ease;
+}
+
+.filters-actions button[color="primary"] {
+  background: #0066CC !important;
+  color: white !important;
+  box-shadow: 0 2px 8px rgba(0, 102, 204, 0.3);
+}
+
+.filters-actions button[color="primary"]:hover {
+  background: #004A99 !important;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 102, 204, 0.4);
+}
+
+.filters-actions button:not([color="primary"]) {
+  background: white !important;
+  color: var(--veolia-gray-700) !important;
+  border: 1px solid var(--veolia-gray-300) !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.filters-actions button:not([color="primary"]):hover {
+  background: var(--veolia-gray-50) !important;
+  border-color: var(--veolia-gray-400) !important;
+  transform: translateY(-1px);
+}
+
+/* ===============================================
+   KPIs GRID
+   =============================================== */
+.kpis-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.kpi-card {
+  border-radius: 16px;
+  border: none;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+  overflow: hidden;
+  position: relative;
+  background: white;
+}
+
+.kpi-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
+}
+
+.kpi-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+}
+
+.kpi-card.primary::before { background: var(--veolia-blue-primary); }
+.kpi-card.success::before { background: var(--sales-green); }
+.kpi-card.info::before { background: var(--sales-indigo); }
+.kpi-card.warning::before { background: var(--sales-amber); }
+.kpi-card.accent::before { background: var(--sales-purple); }
+.kpi-card.secondary::before { background: var(--veolia-gray-600); }
+
+.kpi-content {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 2rem;
+}
+
+.kpi-icon {
+  width: 80px;
+  height: 80px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  flex-shrink: 0;
+}
+
+.kpi-icon mat-icon {
+  font-size: 2rem !important;
+  width: 2rem !important;
+  height: 2rem !important;
+}
+
+.kpi-card.primary .kpi-icon { background: var(--veolia-blue-primary); }
+.kpi-card.success .kpi-icon { background: var(--sales-green); }
+.kpi-card.info .kpi-icon { background: var(--sales-indigo); }
+.kpi-card.warning .kpi-icon { background: var(--sales-amber); }
+.kpi-card.accent .kpi-icon { background: var(--sales-purple); }
+.kpi-card.secondary .kpi-icon { background: var(--veolia-gray-600); }
+
+.kpi-data {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  flex: 1;
+}
+
+.kpi-number {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--veolia-gray-800);
+  line-height: 1.1;
+}
+
+.kpi-label {
+  font-size: 0.9rem;
+  color: var(--veolia-gray-600);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* ===============================================
+   GRÁFICOS - COMPACTOS
+   =============================================== */
+.charts-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.chart-card {
+  border-radius: 8px;
+  border: none;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+  overflow: hidden;
+  background: white;
+}
+
+.chart-card mat-card-header {
+  background: linear-gradient(135deg, var(--veolia-gray-50), rgba(59, 130, 246, 0.05)) !important;
+  padding: 0.75rem 1rem;
+}
+
+.chart-card mat-card-title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--veolia-gray-700);
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.chart-card mat-card-content {
+  padding: 0.75rem 1rem 1rem 1rem;
+}
+
+.chart-container {
+  height: 280px;
+  position: relative;
+  padding: 0.5rem;
+}
+
+.chart-card.trend-chart {
+  grid-column: span 2;
+}
+
+.chart-card.trend-chart .chart-container {
+  height: 220px;
+}
+
+.chart-card.full-width {
+  grid-column: 1 / -1;
+  margin-bottom: 1rem;
+}
+
+.chart-card.full-width .chart-container {
+  height: 280px;
+}
+
+/* ===============================================
+   TABLA - COMPACTA
+   =============================================== */
+.table-card {
+  border-radius: 8px;
+  border: none;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+  overflow: hidden;
+  background: white;
+}
+
+.table-card mat-card-header {
+  background: linear-gradient(135deg, var(--veolia-gray-50), rgba(59, 130, 246, 0.05)) !important;
+  padding: 0.75rem 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.table-card mat-card-title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--veolia-gray-700);
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.table-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.export-button {
+  background: var(--veolia-blue-light) !important;
+  color: var(--veolia-blue-primary) !important;
+  border: 1px solid var(--veolia-blue-primary) !important;
+  padding: 0.3rem 0.75rem;
+  font-size: 0.8rem;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  border-radius: 4px;
+}
+
+.export-button:hover {
+  background: var(--veolia-blue-primary) !important;
+  color: white !important;
+}
+
+.export-button:first-of-type {
+  background: var(--veolia-green-light) !important;
+  color: var(--veolia-green-primary) !important;
+  border: 1px solid var(--veolia-green-primary) !important;
+}
+
+.export-button:first-of-type:hover {
+  background: var(--veolia-green-primary) !important;
+  color: white !important;
+}
+
+.table-card mat-card-content {
+  padding: 0;
+}
+
+.table-container {
+  overflow-x: auto;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.report-table {
+  width: 100%;
+  background: white;
+}
+
+.report-table th {
+  background: linear-gradient(135deg, var(--veolia-gray-100), var(--veolia-gray-50)) !important;
+  color: var(--veolia-gray-700) !important;
+  font-weight: 600 !important;
+  border-bottom: 2px solid var(--sales-blue) !important;
+  padding: 0.6rem 0.5rem !important;
+  font-size: 0.8rem !important;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.report-table td {
+  padding: 0.6rem 0.5rem !important;
+  border-bottom: 1px solid var(--veolia-gray-200) !important;
+  font-size: 0.8rem !important;
+}
+
+.table-row:hover {
+  background: linear-gradient(135deg, var(--veolia-blue-light), rgba(59, 130, 246, 0.05)) !important;
+  transition: all 0.3s ease;
+}
+
+.table-row.highlight {
+  background: linear-gradient(135deg, var(--veolia-green-light), rgba(34, 197, 94, 0.1)) !important;
+  border-left: 4px solid var(--sales-green);
+  box-shadow: 0 2px 8px rgba(34, 197, 94, 0.2);
+}
+
+/* ===============================================
+   BADGES Y ELEMENTOS ESPECÍFICOS
+   =============================================== */
+.generator-column {
+  min-width: 200px;
+}
+
+.generator-info {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.generator-icon {
+  color: var(--sales-blue);
+  font-size: 18px !important;
+  width: 18px !important;
+  height: 18px !important;
+}
+
+.generator-name {
+  font-weight: 500;
+  color: var(--veolia-gray-700);
+  line-height: 1.2;
+}
+
+.type-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.4rem 0.8rem;
+  border-radius: 16px;
+  font-weight: 600;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.type-badge.public {
+  background: var(--veolia-blue-light);
+  color: var(--veolia-blue-primary);
+}
+
+.type-badge.public mat-icon {
+  color: var(--veolia-blue-primary);
+  font-size: 14px !important;
+  width: 14px !important;
+  height: 14px !important;
+}
+
+.type-badge.private {
+  background: var(--veolia-green-light);
+  color: var(--veolia-green-primary);
+}
+
+.type-badge.private mat-icon {
+  color: var(--veolia-green-primary);
+  font-size: 14px !important;
+  width: 14px !important;
+  height: 14px !important;
+}
+
+.zone-info {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.zone-icon {
+  color: var(--veolia-blue-primary);
+  font-size: 16px !important;
+  width: 16px !important;
+  height: 16px !important;
+}
+
+.zone-name {
+  font-weight: 500;
+  color: var(--veolia-gray-700);
+}
+
+.number-badge {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  text-align: center;
+  min-width: 50px;
+}
+
+.number-badge.bags {
+  background: #F3E5F5;
+  color: var(--sales-purple);
+}
+
+.money-badge {
+  display: inline-block;
+  padding: 0.4rem 0.8rem;
+  border-radius: 16px;
+  font-weight: 700;
+  font-size: 0.85rem;
+  background: linear-gradient(135deg, #10B981, #059669);
+  color: white;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 2px 4px rgba(16, 185, 129, 0.3);
+}
+
+.average-info {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.average-icon {
+  color: var(--sales-indigo);
+  font-size: 16px !important;
+  width: 16px !important;
+  height: 16px !important;
+}
+
+.growth-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.4rem 0.8rem;
+  border-radius: 16px;
+  font-weight: 600;
+  font-size: 0.8rem;
+}
+
+.growth-badge.positive {
+  background: var(--veolia-green-light);
+  color: var(--veolia-green-primary);
+}
+
+.growth-badge.positive mat-icon {
+  color: var(--veolia-green-primary);
+  font-size: 14px !important;
+  width: 14px !important;
+  height: 14px !important;
+}
+
+.growth-badge.negative {
+  background: #FFEBEE;
+  color: var(--veolia-error);
+}
+
+.growth-badge.negative mat-icon {
+  color: var(--veolia-error);
+  font-size: 14px !important;
+  width: 14px !important;
+  height: 14px !important;
+}
+
+.growth-badge.neutral {
+  background: var(--veolia-gray-100);
+  color: var(--veolia-gray-600);
+}
+
+.growth-badge.neutral mat-icon {
+  color: var(--veolia-gray-600);
+  font-size: 14px !important;
+  width: 14px !important;
+  height: 14px !important;
+}
+
+.date-info {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.date-icon {
+  color: var(--veolia-gray-500);
+  font-size: 16px !important;
+  width: 16px !important;
+  height: 16px !important;
+}
+
+/* ===============================================
+   ESTADOS DE CARGA Y VACÍO - COMPACTOS
+   =============================================== */
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.95);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  backdrop-filter: blur(8px);
+}
+
+.loading-overlay p {
+  margin-top: 0.75rem;
+  font-size: 0.9rem;
+  color: var(--veolia-gray-600);
+  font-weight: 500;
+}
+
+.no-data-message {
+  text-align: center;
+  padding: 2rem 1.5rem;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+  margin: 1rem 0;
+  border: 2px dashed var(--veolia-gray-300);
+}
+
+.no-data-message mat-icon {
+  font-size: 2.5rem !important;
+  width: 2.5rem !important;
+  height: 2.5rem !important;
+  color: var(--veolia-gray-400);
+  margin-bottom: 0.75rem;
+}
+
+.no-data-message h3 {
+  color: var(--veolia-gray-700);
+  margin-bottom: 0.5rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.no-data-message p {
+  color: var(--veolia-gray-600);
+  font-size: 0.85rem;
+  line-height: 1.4;
+  margin: 0;
+}
+
+/* ===============================================
+   RESPONSIVE DESIGN - OPTIMIZADO PARA COMPACTO
+   =============================================== */
+@media (max-width: 1200px) {
+  .kpis-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .charts-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .main-content {
+    padding: 0 1rem 0.75rem 1rem;
+  }
+
+  .header-content {
+    padding: 0 1rem;
+  }
+
+  .filters-row {
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+  }
+
+  .kpis-grid {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+  }
+
+  .charts-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .table-card mat-card-header {
+    flex-direction: column;
+    gap: 0.5rem;
+    align-items: stretch;
+  }
+
+  .table-actions {
+    justify-content: center;
+  }
+
+  .chart-container {
+    height: 200px;
+  }
+
+  .kpi-content {
+    padding: 0.75rem;
+  }
+
+  .kpi-number {
+    font-size: 1.2rem;
+  }
+
+  .kpi-label {
+    font-size: 0.7rem;
+  }
+
+  .generator-column {
+    min-width: 120px;
+  }
+
+  .generator-name {
+    font-size: 0.75rem;
+  }
+
+  .type-badge {
+    font-size: 0.65rem;
+    padding: 0.2rem 0.4rem;
+  }
+
+  .money-badge {
+    font-size: 0.7rem;
+    padding: 0.2rem 0.4rem;
+  }
+
+  .chart-card.full-width .chart-container {
+    height: 220px;
+  }
+}
+
+@media (max-width: 600px) {
+  .header-title h1 {
+    font-size: 1.2rem;
+  }
+
+  .header-title p {
+    font-size: 0.75rem;
+  }
+
+  .filters-actions {
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  .filters-row {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+  }
+
+  .export-button {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .table-container {
+    font-size: 0.75rem;
+    max-height: 300px;
+  }
+
+  .report-table td {
+    padding: 0.4rem 0.3rem !important;
+  }
+
+  .report-table th {
+    padding: 0.4rem 0.3rem !important;
+    font-size: 0.7rem !important;
+  }
+
+  .kpi-content {
+    padding: 0.6rem;
+  }
+
+  .kpi-number {
+    font-size: 1rem;
+  }
+
+  .kpi-label {
+    font-size: 0.65rem;
+  }
+
+  .generator-info {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.2rem;
+  }
+
+  .chart-container {
+    height: 180px;
+    padding: 0.25rem;
+  }
+
+  .chart-card.full-width .chart-container {
+    height: 200px;
+  }
+}
+
+/* ===============================================
+   SCROLLBAR PERSONALIZADO
+   =============================================== */
+.table-container::-webkit-scrollbar {
+  height: 8px;
+}
+
+.table-container::-webkit-scrollbar-track {
+  background: var(--veolia-gray-100);
+  border-radius: 4px;
+}
+
+.table-container::-webkit-scrollbar-thumb {
+  background: var(--veolia-gray-400);
+  border-radius: 4px;
+}
+
+.table-container::-webkit-scrollbar-thumb:hover {
+  background: var(--veolia-gray-500);
+}
+
+/* ===============================================
+   SNACKBAR STYLES
+   =============================================== */
+::ng-deep .success-snackbar {
+  background-color: var(--veolia-green-primary) !important;
+  color: white !important;
+}
+
+::ng-deep .error-snackbar {
+  background-color: var(--veolia-error) !important;
+  color: white !important;
+}
+
+/* ===============================================
+   ANIMACIONES Y MEJORAS VISUALES
+   =============================================== */
+.kpi-icon mat-icon {
+  transition: transform 0.3s ease;
+}
+
+.kpi-card:hover .kpi-icon mat-icon {
+  transform: scale(1.1);
+}

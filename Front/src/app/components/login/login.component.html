@@ -1,0 +1,132 @@
+<div class="login-container">
+  <!-- Panel Izquierdo - Branding -->
+  <div class="login-left">
+    <div class="left-content">
+      <!-- Logo y Branding -->
+      <div class="veolia-logo-section">
+        <div class="veolia-logo">VEOLIA</div>
+        <div class="veolia-tagline">Resourcing the world</div>
+      </div>
+
+      <!-- Contenido Principal -->
+      <div class="branding-content">
+        <h1 class="brand-title">Bienvenido al Sistema de Gestión Integral de Residuos Patogénicos</h1>
+        <p class="brand-description">
+          Ingresa a tu cuenta para acceder a todas las herramientas de gestión
+          sostenible de residuos
+        </p>
+      </div>
+
+      <!-- Decoración -->
+      <div class="brand-decoration">
+        <div class="decoration-circle circle-1"></div>
+        <div class="decoration-circle circle-2"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Panel Derecho - Formulario -->
+  <div class="login-right">
+    <div class="form-container">
+      <!-- Header del Formulario -->
+      <div class="form-header">
+        <h2 class="form-title">
+          <span class="material-icons form-icon">lock</span>
+          Iniciar Sesión
+        </h2>
+        <p class="form-subtitle">Ingresa tus credenciales para continuar</p>
+      </div>
+
+      <!-- Formulario -->
+      <form [formGroup]="loginForm" (ngSubmit)="onLogin()" class="login-form">
+        <!-- Campo Email -->
+        <div class="form-group">
+          <label for="email" class="form-label">
+            <span class="material-icons">email</span>
+            Correo Electrónico
+          </label>
+          <div class="input-container">
+            <input
+              id="email"
+              type="email"
+              formControlName="email"
+              class="form-input"
+              [class.error]="loginForm.get('email')?.invalid && loginForm.get('email')?.touched"
+              placeholder="ejemplo@correo.com"
+            />
+            <div class="input-icon">
+              <span class="material-icons">person</span>
+            </div>
+          </div>
+          <div class="form-error" *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched">
+            <span class="material-icons">error</span>
+            Ingresa un email válido
+          </div>
+        </div>
+
+        <!-- Campo Contraseña -->
+        <div class="form-group">
+          <label for="password" class="form-label">
+            <span class="material-icons">lock</span>
+            Contraseña
+          </label>
+          <div class="input-container">
+            <input
+              id="password"
+              [type]="showPassword ? 'text' : 'password'"
+              formControlName="password"
+              class="form-input"
+              [class.error]="loginForm.get('password')?.invalid && loginForm.get('password')?.touched"
+              placeholder="Tu contraseña"
+            />
+            <button
+              type="button"
+              class="password-toggle"
+              (click)="togglePassword()"
+            >
+              <span class="material-icons">
+                {{ showPassword ? 'visibility_off' : 'visibility' }}
+              </span>
+            </button>
+          </div>
+          <div class="form-error" *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched">
+            <span class="material-icons">error</span>
+            La contraseña es requerida
+          </div>
+        </div>
+
+
+        <!-- Botón de Login -->
+        <button
+          type="submit"
+          class="login-button"
+          [class.loading]="isLoading"
+          [disabled]="loginForm.invalid || isLoading"
+        >
+          <span class="button-content" *ngIf="!isLoading">
+            <span class="material-icons">login</span>
+            Ingresar
+          </span>
+          <span class="loading-content" *ngIf="isLoading">
+            <span class="spinner"></span>
+            Verificando...
+          </span>
+        </button>
+
+        <!-- Mensaje de Error Global -->
+        <div class="error-message" *ngIf="loginError">
+          <span class="material-icons">warning</span>
+          <div>
+            <strong>Error de autenticación</strong>
+            <p>{{ loginError }}</p>
+          </div>
+        </div>
+      </form>
+
+      <!-- Footer del Formulario -->
+      <div class="form-footer">
+        <p>¿No tienes cuenta? <a href="/alta" class="register-link">Registrarse</a></p>
+      </div>
+    </div>
+  </div>
+</div>

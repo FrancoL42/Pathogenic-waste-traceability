@@ -1,0 +1,225 @@
+<!-- Header Veolia -->
+<div class="veolia-header">
+  <div class="header-content">
+    <div class="veolia-logo-section">
+      <div class="veolia-logo">VEOLIA</div>
+      <div class="veolia-tagline">Resourcing the world</div>
+    </div>
+
+    <div class="header-title">
+      <h1>Sistema de Gestión de Residuos</h1>
+      <p>Portal del Cliente</p>
+    </div>
+
+    <div class="header-actions">
+      <span class="bienvenida">
+        <span class="material-icons">person</span>
+        Bienvenido
+      </span>
+      <button class="logout-btn" (click)="cerrarSesion()">
+        <span class="material-icons">logout</span>
+        Cerrar sesión
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Navegación -->
+<div class="main-navigation">
+  <div class="nav-content">
+    <div class="nav-breadcrumb">
+      <span class="material-icons">dashboard</span>
+      <span>Panel del Cliente</span>
+    </div>
+  </div>
+</div>
+
+<!-- Contenido Principal -->
+<div class="dashboard-container">
+  <div class="dashboard-content">
+
+    <!-- Cards de Servicios -->
+    <div class="services-grid">
+      <!-- Venta de Bolsas -->
+      <div class="service-card primary-service" (click)="irAVenta()">
+        <div class="service-header">
+          <div class="service-icon primary-icon">
+            <span class="material-icons">shopping_cart</span>
+          </div>
+        </div>
+        <div class="service-content">
+          <h3>Venta de Bolsas</h3>
+          <p>Adquirí las bolsas certificadas necesarias para la gestión segura de tus residuos</p>
+          <div class="service-features">
+            <span class="feature-item">
+              <span class="material-icons">verified</span>
+              Certificadas
+            </span>
+            <span class="feature-item">
+              <span class="material-icons">local_shipping</span>
+              Envío rápido
+            </span>
+          </div>
+        </div>
+        <div class="service-arrow">
+          <span class="material-icons">arrow_forward</span>
+        </div>
+      </div>
+
+      <!-- Solicitud de Retiro -->
+      <div class="service-card secondary-service" (click)="openModal()">
+        <div class="service-header">
+          <div class="service-icon secondary-icon">
+            <span class="material-icons">recycling</span>
+          </div>
+        </div>
+        <div class="service-content">
+          <h3>Solicitud de Retiro</h3>
+          <p>Programa el retiro de bolsas con residuos desde tu ubicación de manera conveniente</p>
+          <div class="service-features">
+            <span class="feature-item">
+              <span class="material-icons">schedule</span>
+              Programable
+            </span>
+            <span class="feature-item">
+              <span class="material-icons">location_on</span>
+              A domicilio
+            </span>
+          </div>
+        </div>
+        <div class="service-arrow">
+          <span class="material-icons">arrow_forward</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Solicitud de Retiro -->
+<ng-template #retiroModal>
+  <div class="veolia-modal-header">
+    <h2>
+      <span class="material-icons modal-icon">recycling</span>
+      Solicitud de Retiro
+    </h2>
+    <p class="modal-subtitle">Complete los detalles para programar el retiro de residuos</p>
+  </div>
+
+  <div mat-dialog-content class="veolia-dialog-content">
+    <form [formGroup]="retiroForm" class="retiro-form">
+      <div class="form-section">
+        <h3 class="section-title">
+          <span class="material-icons">inventory</span>
+          Información del Retiro
+        </h3>
+
+        <div class="form-row">
+          <!-- Selector de Zona -->
+          <div class="form-field">
+            <label for="zoneId">
+              <span class="material-icons">location_on</span>
+              Zona de retiro
+            </label>
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Seleccione una zona</mat-label>
+              <mat-select formControlName="zoneId" id="zoneId" (selectionChange)="onZoneChange($event)">
+                <mat-option *ngFor="let zona of zonas; trackBy: trackByZoneId" [value]="zona.id">
+                  {{ zona.name }} (ID: {{ zona.id }})
+                </mat-option>
+              </mat-select>
+              <mat-error *ngIf="hasError('zoneId')">
+                {{ getErrorMessage('zoneId') }}
+              </mat-error>
+            </mat-form-field>
+            <!-- Debug info (eliminar en producción) -->
+            <small *ngIf="zonas.length > 0" style="color: #666; font-size: 0.8rem;">
+              Debug: {{ zonas.length }} zonas cargadas. Valor seleccionado: {{ retiroForm.get('zoneId')?.value }}
+            </small>
+          </div>
+
+          <!-- Cantidad de bolsas -->
+          <div class="form-field">
+            <label for="countBags">
+              <span class="material-icons">production_quantity_limits</span>
+              Cantidad de bolsas
+            </label>
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Cantidad</mat-label>
+              <input
+                matInput
+                id="countBags"
+                formControlName="countBags"
+                type="number"
+                placeholder="Ej: 5"
+                min="1"
+              />
+              <mat-error *ngIf="hasError('countBags')">
+                {{ getErrorMessage('countBags') }}
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <!-- Fecha de retiro -->
+          <div class="form-field full-width">
+            <label for="scheduledDate">
+              <span class="material-icons">calendar_today</span>
+              Fecha de retiro (solo días hábiles)
+            </label>
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Seleccione fecha</mat-label>
+              <input
+                matInput
+                id="scheduledDate"
+                formControlName="scheduledDate"
+                [matDatepicker]="picker"
+                [matDatepickerFilter]="dateFilter"
+                [min]="minDate"
+                [max]="maxDate"
+                placeholder="Seleccione fecha"
+                readonly
+              />
+              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>
+              <mat-error *ngIf="hasError('scheduledDate')">
+                {{ getErrorMessage('scheduledDate') }}
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <!-- Información adicional -->
+        <div class="info-section">
+          <div class="info-card-small">
+            <span class="material-icons">info</span>
+            <div>
+              <strong>Información importante:</strong>
+              <ul>
+                <li>El retiro se realizará en la fecha y zona seleccionada</li>
+                <li>Solo se puede programar retiros en días hábiles (lunes a viernes)</li>
+                <li>Asegúrese de que las bolsas estén correctamente cerradas</li>
+                <li>Recibirá una confirmación por email</li>
+                <li>El horario de retiro será coordinado posteriormente</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <div class="veolia-dialog-actions">
+    <button mat-button mat-dialog-close class="cancel-button">
+      <span class="material-icons">close</span>
+      Cancelar
+    </button>
+    <button
+      class="create-button"
+      (click)="confirmarRetiro()"
+      [disabled]="retiroForm.invalid">
+      <span class="material-icons">check_circle</span>
+      Confirmar Retiro
+    </button>
+  </div>
+</ng-template>

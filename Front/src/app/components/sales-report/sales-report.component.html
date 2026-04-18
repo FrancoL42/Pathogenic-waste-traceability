@@ -1,0 +1,326 @@
+<div class="sales-report-container">
+  <!-- Header -->
+  <header class="report-header">
+    <div class="header-content">
+      <div class="header-title">
+        <mat-icon class="header-icon">shopping_cart</mat-icon>
+        <div>
+          <h1>Reporte de Ventas de Bolsas</h1>
+          <p>Análisis de cantidad de bolsas vendidas por generador</p>
+        </div>
+      </div>
+      <div class="header-actions">
+        <button mat-button (click)="goBack()" class="back-button">
+          <mat-icon>arrow_back</mat-icon>
+          Volver al Dashboard
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <div class="main-content">
+    <!-- Filtros -->
+    <mat-card class="filters-card">
+      <mat-card-header>
+        <mat-card-title>
+          <mat-icon>filter_list</mat-icon>
+          Filtros de Búsqueda
+        </mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <form [formGroup]="filterForm" class="filters-form">
+          <div class="filters-row">
+            <mat-form-field appearance="outline">
+              <mat-label>Fecha Inicio</mat-label>
+              <input matInput type="date" formControlName="fechaInicio">
+              <mat-icon matSuffix>date_range</mat-icon>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Fecha Fin</mat-label>
+              <input matInput type="date" formControlName="fechaFin">
+              <mat-icon matSuffix>date_range</mat-icon>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Tipo de Generador</mat-label>
+              <mat-select formControlName="tipoGenerador">
+                <mat-option value="TODOS">Todos los Tipos</mat-option>
+                <mat-option value="Público">Público</mat-option>
+                <mat-option value="Privado">Privado</mat-option>
+              </mat-select>
+              <mat-icon matSuffix>business</mat-icon>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Zona</mat-label>
+              <mat-select formControlName="zona">
+                <mat-option value="TODAS">Todas las Zonas</mat-option>
+                <mat-option *ngFor="let zona of availableZones" [value]="zona">{{ zona }}</mat-option>
+              </mat-select>
+              <mat-icon matSuffix>location_on</mat-icon>
+            </mat-form-field>
+          </div>
+
+          <div class="filters-actions">
+            <button mat-raised-button color="primary" (click)="generateReport()" [disabled]="isLoading">
+              <mat-icon>analytics</mat-icon>
+              {{ isLoading ? 'Generando...' : 'Generar Reporte' }}
+            </button>
+            <button mat-button (click)="clearFilters()" [disabled]="isLoading">
+              <mat-icon>clear</mat-icon>
+              Limpiar Filtros
+            </button>
+          </div>
+        </form>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- KPIs -->
+    <div class="kpis-grid" *ngIf="filtrosAplicados">
+      <mat-card class="kpi-card primary">
+        <div class="kpi-content">
+          <div class="kpi-icon">
+            <mat-icon>inventory_2</mat-icon>
+          </div>
+          <div class="kpi-data">
+            <span class="kpi-number">{{ kpis.promedioBolsasPorPeriodo | number }}</span>
+            <span class="kpi-label">Promedio Bolsas/Período</span>
+          </div>
+        </div>
+      </mat-card>
+
+      <mat-card class="kpi-card success">
+        <div class="kpi-content">
+          <div class="kpi-icon">
+            <mat-icon>pie_chart</mat-icon>
+          </div>
+          <div class="kpi-data">
+            <span class="kpi-number">{{ kpis.porcentajeTipoPublico }}%</span>
+            <span class="kpi-label">Generadores Públicos</span>
+          </div>
+        </div>
+      </mat-card>
+
+      <mat-card class="kpi-card info">
+        <div class="kpi-content">
+          <div class="kpi-icon">
+            <mat-icon [class]="getCrecimientoColor(kpis.tendenciaCrecimiento)">{{ getCrecimientoIcon(kpis.tendenciaCrecimiento) }}</mat-icon>
+          </div>
+          <div class="kpi-data">
+            <span class="kpi-number">{{ kpis.tendenciaCrecimiento | number:'1.1-1' }}%</span>
+            <span class="kpi-label">Tendencia Crecimiento</span>
+          </div>
+        </div>
+      </mat-card>
+
+      <mat-card class="kpi-card warning">
+        <div class="kpi-content">
+          <div class="kpi-icon">
+            <mat-icon>attach_money</mat-icon>
+          </div>
+          <div class="kpi-data">
+            <span class="kpi-number">{{ kpis.montoTotalVentas | currency:'ARS':'symbol':'1.0-0' }}</span>
+            <span class="kpi-label">Total Ventas</span>
+          </div>
+        </div>
+      </mat-card>
+
+      <mat-card class="kpi-card accent">
+        <div class="kpi-content">
+          <div class="kpi-icon">
+            <mat-icon>star</mat-icon>
+          </div>
+          <div class="kpi-data">
+            <span class="kpi-number">{{ kpis.generadorConMasVentas.length > 12 ? (kpis.generadorConMasVentas | slice:0:12) + '...' : kpis.generadorConMasVentas }}</span>
+            <span class="kpi-label">Top Generador</span>
+          </div>
+        </div>
+      </mat-card>
+
+      <mat-card class="kpi-card secondary">
+        <div class="kpi-content">
+          <div class="kpi-icon">
+            <mat-icon>receipt</mat-icon>
+          </div>
+          <div class="kpi-data">
+            <span class="kpi-number">{{ kpis.totalVentasGlobal | number }}</span>
+            <span class="kpi-label">Total Transacciones</span>
+          </div>
+        </div>
+      </mat-card>
+    </div>
+
+    <!-- Gráficos -->
+    <div class="charts-grid" *ngIf="filtrosAplicados">
+      <!-- Gráfico de Distribución por Tipo -->
+      <mat-card class="chart-card">
+        <mat-card-header>
+          <mat-card-title>
+            <mat-icon>donut_small</mat-icon>
+            Distribución por Tipo
+          </mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="chart-container">
+            <canvas #typeDistributionChart></canvas>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- Gráfico Top Generadores -->
+      <mat-card class="chart-card">
+        <mat-card-header>
+          <mat-card-title>
+            <mat-icon>bar_chart</mat-icon>
+            Top 10 Generadores
+          </mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="chart-container">
+            <canvas #topGeneratorsChart></canvas>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+
+    <!-- Tabla de datos -->
+    <mat-card class="table-card" *ngIf="filtrosAplicados">
+      <mat-card-header>
+        <mat-card-title>
+          <mat-icon>table_view</mat-icon>
+          Detalle de Ventas por Generador
+        </mat-card-title>
+        <div class="table-actions">
+          <button mat-button (click)="exportToExcel()" class="export-button">
+            <mat-icon>file_download</mat-icon>
+            Exportar Excel
+          </button>
+          <button mat-button (click)="exportToPDF()" class="export-button">
+            <mat-icon>picture_as_pdf</mat-icon>
+            Exportar PDF
+          </button>
+        </div>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="table-container">
+          <table mat-table [dataSource]="dataSource" matSort class="report-table">
+            <!-- Generador Column -->
+            <ng-container matColumnDef="generador">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header class="generator-column">
+                <mat-icon>business</mat-icon>
+                Generador
+              </th>
+              <td mat-cell *matCellDef="let element" class="generator-cell">
+                <div class="generator-info">
+                  <mat-icon class="generator-icon">local_hospital</mat-icon>
+                  <span class="generator-name">{{ element.generador }}</span>
+                </div>
+              </td>
+            </ng-container>
+
+            <!-- Tipo Generador Column -->
+            <ng-container matColumnDef="tipoGenerador">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Tipo</th>
+              <td mat-cell *matCellDef="let element">
+                <span class="type-badge"
+                      [class.public]="element.tipoGenerador === 'Público'"
+                      [class.private]="element.tipoGenerador === 'Privado'">
+                  <mat-icon>{{ element.tipoGenerador === 'Público' ? 'account_balance' : 'business' }}</mat-icon>
+                  {{ element.tipoGenerador }}
+                </span>
+              </td>
+            </ng-container>
+
+            <!-- Zona Column -->
+            <ng-container matColumnDef="zona">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Zona</th>
+              <td mat-cell *matCellDef="let element">
+                <div class="zone-info">
+                  <mat-icon class="zone-icon">place</mat-icon>
+                  <span class="zone-name">{{ element.zona }}</span>
+                </div>
+              </td>
+            </ng-container>
+
+            <!-- Cantidad Bolsas Column -->
+            <ng-container matColumnDef="cantidadBolsas">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Cantidad Bolsas</th>
+              <td mat-cell *matCellDef="let element">
+                <span class="number-badge bags">{{ element.cantidadBolsas | number }}</span>
+              </td>
+            </ng-container>
+
+            <!-- Monto Total Column -->
+            <ng-container matColumnDef="montoTotal">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Monto Total</th>
+              <td mat-cell *matCellDef="let element">
+                <span class="money-badge">{{ element.montoTotal | currency:'ARS':'symbol':'1.0-0' }}</span>
+              </td>
+            </ng-container>
+
+            <!-- Promedio Ventas por Mes Column -->
+            <ng-container matColumnDef="promedioVentasPorMes">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Prom./Mes</th>
+              <td mat-cell *matCellDef="let element">
+                <div class="average-info">
+                  <mat-icon class="average-icon">trending_up</mat-icon>
+                  <span>{{ element.promedioVentasPorMes | number:'1.1-1' }}</span>
+                </div>
+              </td>
+            </ng-container>
+
+            <!-- Crecimiento Mensual Column -->
+            <ng-container matColumnDef="crecimientoMensual">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Crecimiento</th>
+              <td mat-cell *matCellDef="let element">
+                <span class="growth-badge"
+                      [class.positive]="element.crecimientoMensual > 0"
+                      [class.negative]="element.crecimientoMensual < 0"
+                      [class.neutral]="element.crecimientoMensual === 0">
+                  <mat-icon>{{ getCrecimientoIcon(element.crecimientoMensual) }}</mat-icon>
+                  {{ element.crecimientoMensual | number:'1.1-1' }}%
+                </span>
+              </td>
+            </ng-container>
+
+            <!-- Fecha Última Venta Column -->
+            <ng-container matColumnDef="fechaUltimaVenta">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Última Venta</th>
+              <td mat-cell *matCellDef="let element">
+                <div class="date-info">
+                  <mat-icon class="date-icon">event</mat-icon>
+                  <span>{{ element.fechaUltimaVenta | date:'dd/MM/yyyy' }}</span>
+                </div>
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"
+                class="table-row"
+                [class.highlight]="row.generador === kpis.generadorConMasVentas"></tr>
+          </table>
+
+          <mat-paginator
+            [pageSizeOptions]="[10, 25, 50, 100]"
+            showFirstLastButtons
+            aria-label="Seleccione página">
+          </mat-paginator>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- No data message -->
+    <div class="no-data-message" *ngIf="!filtrosAplicados && !isLoading">
+      <mat-icon>analytics</mat-icon>
+      <h3>Genere un reporte de ventas</h3>
+      <p>Configure los filtros de fecha, tipo de generador y zona, luego haga clic en "Generar Reporte" para ver el análisis de ventas de bolsas.</p>
+    </div>
+  </div>
+
+  <!-- Loading overlay -->
+  <div class="loading-overlay" *ngIf="isLoading">
+    <mat-spinner diameter="60"></mat-spinner>
+    <p>Generando reporte de ventas...</p>
+  </div>
+</div>

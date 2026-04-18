@@ -1,0 +1,189 @@
+<div class="close-roadmap-modal">
+  <!-- Header del Modal -->
+  <div class="modal-header">
+    <h2 mat-dialog-title>
+      <mat-icon>flag</mat-icon>
+      Finalizar Hoja de Ruta
+    </h2>
+    <button mat-icon-button mat-dialog-close>
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  <!-- Información de la Ruta -->
+  <div class="roadmap-info">
+    <mat-card class="info-card">
+      <mat-card-content>
+        <div class="info-grid">
+          <div class="info-item">
+            <mat-icon>location_on</mat-icon>
+            <div class="info-details">
+              <span class="label">Zona</span>
+              <span class="value">{{ data.roadmap.zone }}</span>
+            </div>
+          </div>
+
+          <div class="info-item">
+            <mat-icon>schedule</mat-icon>
+            <div class="info-details">
+              <span class="label">Fecha</span>
+              <span class="value">{{ data.roadmap.collectDate | date:'short' }}</span>
+            </div>
+          </div>
+
+          <div class="info-item">
+            <mat-icon>business</mat-icon>
+            <div class="info-details">
+              <span class="label">Generadores</span>
+              <span class="value">{{ data.roadmap.generators.length }}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Progreso actual -->
+        <div class="progress-section">
+          <div class="progress-header">
+            <h4>Progreso de Recolección</h4>
+            <mat-chip [class]="getProgressStatusClass()">
+              <mat-icon matChipAvatar>{{ getProgressIcon() }}</mat-icon>
+              {{ roadmapProgress.percentage }}% Completado
+            </mat-chip>
+          </div>
+
+          <div class="progress-details">
+            <div class="progress-numbers">
+              <span class="collected">{{ roadmapProgress.completed }}</span>
+              <span class="separator">/</span>
+              <span class="total">{{ roadmapProgress.total }}</span>
+              <span class="label">bolsas recolectadas</span>
+            </div>
+
+            <mat-progress-bar
+              mode="determinate"
+              [value]="roadmapProgress.percentage"
+              class="progress-bar">
+            </mat-progress-bar>
+          </div>
+        </div>
+
+        <!-- Alerta si no hay precintos recolectados -->
+        <div class="warning-section" *ngIf="roadmapProgress.completed === 0">
+          <mat-icon color="warn">warning</mat-icon>
+          <div class="warning-text">
+            <strong>Sin precintos recolectados</strong>
+            <p>Las observaciones son obligatorias cuando no se recolectaron precintos.</p>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <!-- Formulario de Cierre -->
+  <form [formGroup]="closeForm" class="close-form">
+    <h3>Datos de Finalización</h3>
+
+    <div class="form-row">
+      <mat-form-field appearance="outline" class="form-field">
+        <mat-label>Hora de Retorno</mat-label>
+        <input matInput
+               type="time"
+               formControlName="returnHour"
+               step="1"
+               placeholder="HH:mm:ss">
+        <mat-icon matSuffix>schedule</mat-icon>
+        <!-- 🔧 CORREGIDO: Usar hasError en lugar de invalid && touched -->
+        <mat-error *ngIf="closeForm.get('returnHour')?.hasError('required') && closeForm.get('returnHour')?.touched">
+          Hora de retorno requerida
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="form-field">
+        <mat-label>Kilometraje Final</mat-label>
+        <input matInput
+               type="number"
+               step="0.1"
+               min="0"
+               formControlName="finalKm"
+               placeholder="150.5">
+        <mat-icon matSuffix>speed</mat-icon>
+        <mat-hint>Kilometraje al finalizar la ruta</mat-hint>
+        <!-- 🔧 CORREGIDO: Acceso correcto a errores -->
+        <mat-error *ngIf="closeForm.get('finalKm')?.touched">
+          <span *ngIf="closeForm.get('finalKm')?.hasError('required')">Kilometraje final requerido</span>
+          <span *ngIf="closeForm.get('finalKm')?.hasError('min')">Debe ser mayor a 0</span>
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>
+        Observaciones
+        <span *ngIf="isObservationsRequired()" class="required-asterisk">*</span>
+      </mat-label>
+      <textarea matInput
+                formControlName="observations"
+                rows="4"
+                maxlength="500"
+                [placeholder]="isObservationsRequired() ? 'Explica por qué no se pudieron recolectar precintos...' : 'Observaciones adicionales (opcional)'">
+    </textarea>
+      <mat-icon matSuffix>notes</mat-icon>
+      <!-- 🔧 CORREGIDO: Acceso seguro a valor -->
+      <mat-hint align="end">{{ (closeForm.get('observations')?.value || '').length }}/500</mat-hint>
+      <!-- 🔧 CORREGIDO: Verificación de errores -->
+      <mat-error *ngIf="closeForm.get('observations')?.touched">
+        <span *ngIf="closeForm.get('observations')?.hasError('required')">Observaciones requeridas cuando no hay precintos recolectados</span>
+        <span *ngIf="closeForm.get('observations')?.hasError('minlength')">Mínimo 10 caracteres</span>
+      </mat-error>
+    </mat-form-field>
+  </form>
+
+  <!-- Resumen del Cierre -->
+  <div class="closure-summary">
+    <mat-card class="summary-card">
+      <mat-card-content>
+        <h4>Resumen del Cierre</h4>
+        <div class="summary-grid">
+          <div class="summary-item">
+            <mat-icon class="summary-icon success">inventory</mat-icon>
+            <div class="summary-details">
+              <span class="summary-number">{{ roadmapProgress.completed }}</span>
+              <span class="summary-label">Precintos a entregar en planta</span>
+            </div>
+          </div>
+
+          <div class="summary-item">
+            <mat-icon class="summary-icon info">business</mat-icon>
+            <div class="summary-details">
+              <span class="summary-number">{{ data.roadmap.generators.length }}</span>
+              <span class="summary-label">Generadores visitados</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="action-note">
+          <mat-icon>info</mat-icon>
+          <span>Los precintos recolectados pasarán a estado "EN_PLANTA" para su procesamiento.</span>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <!-- Botones de Acción -->
+  <div class="modal-actions" mat-dialog-actions>
+    <button mat-stroked-button
+            (click)="onClose()"
+            class="cancel-button">
+      <mat-icon>cancel</mat-icon>
+      Cancelar
+    </button>
+
+    <button mat-raised-button
+            color="primary"
+            (click)="onConfirm()"
+            [disabled]="closeForm.invalid"
+            class="confirm-button">
+      <mat-icon>flag</mat-icon>
+      Finalizar Hoja de Ruta
+    </button>
+  </div>
+</div>

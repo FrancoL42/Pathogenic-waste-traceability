@@ -1,0 +1,394 @@
+<!-- empleado-work.component.html - VERSIÓN COMPLETA ACTUALIZADA PARA ÓRDENES -->
+
+<!-- Header con estilo VEOLIA -->
+<div class="veolia-header">
+  <div class="header-left">
+    <div class="veolia-brand">
+      <h1>VEOLIA</h1>
+      <p class="tagline">Resourcing the world</p>
+    </div>
+  </div>
+  <div class="header-center">
+    <h2 class="system-title">Sistema de Gestión de Residuos</h2>
+    <p class="panel-subtitle">Recolección de Residuos</p>
+  </div>
+  <div class="header-right">
+    <button mat-raised-button color="accent" (click)="goBack()">
+      <mat-icon>arrow_back</mat-icon>
+      Volver
+    </button>
+    <button mat-raised-button color="primary" (click)="refresh()" [disabled]="loading">
+      <mat-icon>refresh</mat-icon>
+      Actualizar
+    </button>
+  </div>
+</div>
+
+<!-- Green divider line -->
+<div class="green-divider"></div>
+
+<!-- Indicador de estado de ubicación -->
+<div class="location-status-bar" *ngIf="locationErrorInfo || usesFallbackLocation">
+  <div class="container">
+    <div class="location-status-content">
+      <!-- Error de ubicación -->
+      <div *ngIf="locationErrorInfo" class="location-warning">
+        <mat-icon>location_off</mat-icon>
+        <span class="warning-text">{{ locationErrorInfo.message }}</span>
+        <button
+          mat-stroked-button
+          class="retry-button"
+          (click)="refreshLocation()"
+          [disabled]="gettingLocation"
+          *ngIf="locationErrorInfo.canRetry">
+          <mat-icon *ngIf="!gettingLocation">refresh</mat-icon>
+          <mat-spinner *ngIf="gettingLocation" diameter="16"></mat-spinner>
+          {{ gettingLocation ? 'Obteniendo...' : 'Reintentar' }}
+        </button>
+      </div>
+
+      <!-- Ubicación de respaldo -->
+      <div *ngIf="usesFallbackLocation && !locationErrorInfo" class="location-fallback">
+        <mat-icon>location_city</mat-icon>
+        <span class="fallback-text">Usando ubicación predeterminada</span>
+        <button
+          mat-stroked-button
+          class="enable-location-button"
+          (click)="refreshLocation()"
+          [disabled]="gettingLocation">
+          <mat-icon *ngIf="!gettingLocation">my_location</mat-icon>
+          <mat-spinner *ngIf="gettingLocation" diameter="16"></mat-spinner>
+          {{ gettingLocation ? 'Obteniendo...' : 'Usar mi ubicación' }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Loading -->
+<div class="container" *ngIf="loading">
+  <div class="loading-container">
+    <mat-spinner diameter="50"></mat-spinner>
+    <p class="loading-text">Cargando hoja de ruta...</p>
+  </div>
+</div>
+
+<!-- Error -->
+<div class="container" *ngIf="error && !loading">
+  <mat-card class="error-card">
+    <mat-card-content>
+      <div class="error-content">
+        <mat-icon color="warn" class="error-icon">error</mat-icon>
+        <h3>{{ error }}</h3>
+        <button mat-raised-button color="primary" (click)="refresh()">
+          <mat-icon>refresh</mat-icon>
+          Reintentar
+        </button>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>
+
+<!-- Main content -->
+<div class="container" *ngIf="!loading && !error && roadmap">
+  <!-- Header de la ruta -->
+  <div class="route-header">
+    <div class="route-info">
+      <h2>
+        <mat-icon>location_on</mat-icon>
+        Zona {{ roadmap.zone }}
+      </h2>
+      <p class="route-details">
+        <mat-icon>schedule</mat-icon>
+        {{ roadmap.collectDate | date:'fullDate' }} - {{ roadmap.collectDate | date:'shortTime' }}
+      </p>
+      <p class="employee-name">Empleado: {{ employeeName }}</p>
+
+      <!-- Indicador de ubicación actual -->
+      <div class="current-location-info" *ngIf="currentLocation">
+        <p class="location-status">
+          <mat-icon [class]="usesFallbackLocation ? 'location-approximate' : 'location-accurate'">
+            {{ usesFallbackLocation ? 'location_city' : 'my_location' }}
+          </mat-icon>
+          <span [class]="usesFallbackLocation ? 'approximate-text' : 'accurate-text'">
+            {{ usesFallbackLocation ? 'Ubicación aproximada' : 'Ubicación GPS activa' }}
+          </span>
+        </p>
+      </div>
+
+      <!-- Panel de optimización de rutas -->
+      <div class="route-optimization-info" *ngIf="routeOptimizationSupported">
+        <div class="optimization-toggle">
+          <mat-icon>alt_route</mat-icon>
+          <span>Rutas optimizadas disponibles</span>
+          <button
+            mat-icon-button
+            [color]="showOptimizedRoutes ? 'primary' : 'basic'"
+            (click)="toggleOptimizedRoutes()"
+            matTooltip="{{ showOptimizedRoutes ? 'Desactivar' : 'Activar' }} rutas optimizadas">
+            <mat-icon>{{ showOptimizedRoutes ? 'toggle_on' : 'toggle_off' }}</mat-icon>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Progreso total -->
+    <div class="total-progress">
+      <div class="progress-circle" [class.completed]="isRoadmapComplete()">
+        <div class="progress-text">
+          <span class="percentage">{{ getTotalProgress().percentage }}%</span>
+          <span class="label">Completado</span>
+        </div>
+      </div>
+      <div class="progress-details">
+        <p>{{ getTotalProgress().completed }} / {{ getTotalProgress().total }} bolsas recolectadas</p>
+        <mat-progress-bar
+          mode="determinate"
+          [value]="getTotalProgress().percentage"
+          class="total-progress-bar">
+        </mat-progress-bar>
+      </div>
+    </div>
+  </div>
+
+  <mat-divider class="section-divider"></mat-divider>
+
+  <!-- Lista de generadores -->
+  <div class="generators-list">
+    <h3 class="section-title">
+      <mat-icon>business</mat-icon>
+      Generadores Asignados ({{ roadmap.generators.length }})
+    </h3>
+
+    <div class="generators-grid">
+      <mat-card
+        *ngFor="let generator of roadmap.generators"
+        class="generator-card"
+        [class]="getGeneratorStatusClass(getGeneratorStatus(generator))">
+
+        <!-- Header del generador -->
+        <mat-card-header>
+          <div class="generator-header-content">
+            <div class="generator-info">
+              <mat-card-title class="generator-name">
+                <mat-icon class="generator-icon">business</mat-icon>
+                {{ generator.name }}
+              </mat-card-title>
+              <mat-card-subtitle class="generator-address" *ngIf="generator.address">
+                <mat-icon>place</mat-icon>
+                {{ generator.address }}
+              </mat-card-subtitle>
+            </div>
+            <div class="generator-status">
+              <mat-chip-set>
+                <mat-chip [class]="getGeneratorStatusClass(getGeneratorStatus(generator))">
+                  <mat-icon matChipAvatar>{{ getGeneratorStatusIcon(getGeneratorStatus(generator)) }}</mat-icon>
+                  {{ getGeneratorStatus(generator) }}
+                </mat-chip>
+              </mat-chip-set>
+            </div>
+          </div>
+        </mat-card-header>
+
+        <mat-card-content>
+          <!-- Progreso del generador -->
+          <div class="generator-progress">
+            <div class="progress-info">
+              <div class="progress-numbers">
+                <span class="collected">{{ generator.collectedBags || 0 }}</span>
+                <span class="separator">/</span>
+                <!-- ✅ USAR requestedBags DE LA ORDEN -->
+                <span class="total">{{ generator.requestedBags || generator.totalBags || 0 }}</span>
+                <span class="label">bolsas</span>
+              </div>
+              <div class="progress-percentage">
+                {{ getProgressPercentage(generator) }}%
+              </div>
+            </div>
+
+            <mat-progress-bar
+              mode="determinate"
+              [value]="getProgressPercentage(generator)"
+              class="generator-progress-bar">
+            </mat-progress-bar>
+          </div>
+
+          <!-- ✅ NUEVA SECCIÓN: Información de la orden -->
+          <div class="order-summary" *ngIf="generator.requestedBags">
+            <p class="order-info">
+              <mat-icon>receipt_long</mat-icon>
+              Orden: {{ generator.requestedBags }} bolsas solicitadas
+            </p>
+
+            <div class="order-status">
+              <span class="order-status-item requested">
+                {{ generator.requestedBags || 0 }} solicitadas
+              </span>
+              <span class="order-status-item collected" *ngIf="getCollectedBagsCount(generator) > 0">
+                {{ getCollectedBagsCount(generator) }} recolectadas
+              </span>
+              <span class="order-status-item pending" *ngIf="getPendingBagsCount(generator) > 0">
+                {{ getPendingBagsCount(generator) }} pendientes
+              </span>
+            </div>
+          </div>
+
+          <!-- ✅ ACTUALIZADA: Lista de precintos (ahora con contexto de orden) -->
+          <div class="seals-summary" *ngIf="generator.seals && generator.seals.length > 0">
+            <p class="seals-info">
+              <mat-icon>local_offer</mat-icon>
+              {{ generator.seals.length }} precintos disponibles
+              <span class="order-context" *ngIf="generator.requestedBags">
+                (para {{ generator.requestedBags }} bolsas de la orden)
+              </span>
+            </p>
+
+            <div class="seals-status">
+              <span class="seal-status ocupado">
+                {{ getOccupiedSealsCount(generator) }} sin recolectar
+              </span>
+              <span class="seal-status recolectado" *ngIf="getCollectedSealsCount(generator) > 0">
+                {{ getCollectedSealsCount(generator) }} recolectados
+              </span>
+            </div>
+          </div>
+        </mat-card-content>
+
+        <!-- Acciones del generador -->
+        <mat-card-actions align="end" class="generator-actions">
+          <!-- Botón Mapa Mejorado -->
+          <button
+            mat-stroked-button
+            [color]="showOptimizedRoutes ? 'primary' : 'accent'"
+            (click)="openMapView(generator)"
+            [disabled]="getGeneratorStatus(generator) === 'COMPLETADO' || !hasValidCoordinates(generator)"
+            class="enhanced-map-button"
+            [matTooltip]="getMapButtonTooltip(generator)">
+
+            <mat-icon>{{ showOptimizedRoutes ? 'alt_route' : 'map' }}</mat-icon>
+            {{ showOptimizedRoutes ? 'Ruta Optimizada' : 'Ver en Mapa' }}
+          </button>
+
+          <!-- Botón: Escanear QR -->
+          <button
+            mat-raised-button
+            [color]="getGeneratorStatus(generator) === 'COMPLETADO' ? 'accent' : 'primary'"
+            (click)="openQrScanner(generator)"
+            [disabled]="getGeneratorStatus(generator) === 'COMPLETADO'"
+            class="scan-button">
+
+            <mat-icon>
+              {{ getGeneratorStatus(generator) === 'COMPLETADO' ? 'check_circle' : 'qr_code_scanner' }}
+            </mat-icon>
+
+            {{ getGeneratorStatus(generator) === 'COMPLETADO' ? 'Completado' : 'Escanear QR' }}
+          </button>
+        </mat-card-actions>
+      </mat-card>
+    </div>
+  </div>
+
+  <!-- Panel de navegación global mejorado -->
+  <div class="navigation-panel" *ngIf="roadmap.generators.length > 1">
+    <mat-card class="navigation-card">
+      <mat-card-header>
+        <mat-card-title>
+          <mat-icon>navigation</mat-icon>
+          Navegación de Ruta
+        </mat-card-title>
+        <mat-card-subtitle>
+          Opciones de navegación para toda la ruta
+          <!-- Indicador de ubicación en navegación -->
+          <span *ngIf="usesFallbackLocation" class="navigation-location-warning">
+            (usando ubicación aproximada)
+          </span>
+        </mat-card-subtitle>
+      </mat-card-header>
+
+      <mat-card-content>
+        <!-- Información del generador más cercano -->
+        <div class="nearest-generator-info" *ngIf="nearestGenerator && !usesFallbackLocation">
+          <h4>
+            <mat-icon>near_me</mat-icon>
+            Más cercano: {{ nearestGenerator.name }}
+          </h4>
+          <div class="nearest-stats">
+            <span class="distance">📏 {{ nearestGenerator.distance }}</span>
+            <span class="time">⏱️ {{ nearestGenerator.estimatedTime }}</span>
+          </div>
+        </div>
+
+        <!-- Estadísticas de ruta -->
+        <div class="navigation-stats" *ngIf="routeSummary || optimizedMultiStopRoute">
+          <div class="stat-item" *ngIf="routeSummary">
+            <mat-icon>straighten</mat-icon>
+            <span>{{ routeSummary.totalDistance | number:'1.1-1' }} km total</span>
+          </div>
+          <div class="stat-item" *ngIf="routeSummary">
+            <mat-icon>schedule</mat-icon>
+            <span>{{ formatTime(routeSummary.totalTimeMinutes) }}</span>
+          </div>
+          <div class="stat-item">
+            <mat-icon>business</mat-icon>
+            <span>{{ getPendingGeneratorsCount() }} pendientes</span>
+          </div>
+
+          <!-- Estadísticas de ruta optimizada -->
+          <div class="optimized-route-stats" *ngIf="optimizedMultiStopRoute && showOptimizedRoutes">
+            <div class="stat-item optimized">
+              <mat-icon>alt_route</mat-icon>
+              <span>{{ routeService.formatDistance(optimizedMultiStopRoute.totalDistance, true) }} optimizado</span>
+            </div>
+            <div class="stat-item optimized">
+              <mat-icon>timer</mat-icon>
+              <span>{{ routeService.formatDuration(optimizedMultiStopRoute.totalDuration) }} estimado</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Acciones de navegación mejoradas -->
+        <div class="navigation-actions">
+          <!-- Botón ruta optimizada completa -->
+          <button
+            mat-raised-button
+            color="primary"
+            (click)="showCompleteOptimizedRoute()"
+            [disabled]="!routeOptimizationSupported || loadingRoute"
+            *ngIf="routeOptimizationSupported">
+            <mat-icon *ngIf="!loadingRoute">alt_route</mat-icon>
+            <mat-spinner *ngIf="loadingRoute" diameter="20"></mat-spinner>
+            {{ loadingRoute ? 'Calculando...' : 'Ruta Optimizada Completa' }}
+          </button>
+
+          <!-- Botón ruta tradicional -->
+          <button
+            mat-stroked-button
+            color="accent"
+            (click)="showOptimizedRoute()"
+            [disabled]="loadingRoute">
+            <mat-icon *ngIf="!loadingRoute">directions</mat-icon>
+            <mat-spinner *ngIf="loadingRoute" diameter="20"></mat-spinner>
+            {{ loadingRoute ? 'Cargando...' : 'Ver Ruta Tradicional' }}
+          </button>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <!-- Mensaje de ruta completa -->
+  <div *ngIf="isRoadmapComplete()" class="completion-message">
+    <mat-card class="completion-card">
+      <mat-card-content>
+        <div class="completion-content">
+          <mat-icon class="completion-icon">check_circle</mat-icon>
+          <h3>¡Ruta Completada!</h3>
+          <p>Has recolectado todas las bolsas de esta zona.</p>
+          <button mat-raised-button color="primary" (click)="goBack()">
+            <mat-icon>arrow_back</mat-icon>
+            Volver al Dashboard
+          </button>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

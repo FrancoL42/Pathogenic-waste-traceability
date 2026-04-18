@@ -1,0 +1,171 @@
+<!-- Header del modal -->
+<div class="scanner-header">
+  <h2 mat-dialog-title>
+    <mat-icon>qr_code_scanner</mat-icon>
+    Escanear Precinto
+  </h2>
+  <button mat-icon-button (click)="close()" class="close-button">
+    <mat-icon>close</mat-icon>
+  </button>
+</div>
+
+<!-- Info del generador -->
+<div class="generator-info">
+  <div class="generator-details">
+    <h3>{{ data.generator.name }}</h3>
+    <p class="progress-info">
+      {{ data.generator.collectedBags }} / {{ data.generator.totalBags }} bolsas recolectadas
+    </p>
+  </div>
+  <mat-progress-bar
+    mode="determinate"
+    [value]="data.generator.totalBags > 0 ? (data.generator.collectedBags / data.generator.totalBags) * 100 : 0"
+    class="generator-progress">
+  </mat-progress-bar>
+</div>
+
+<mat-divider></mat-divider>
+
+<!-- Contenido principal -->
+<mat-dialog-content class="scanner-content">
+
+  <!-- Toggle entre scanner y manual -->
+  <div class="input-toggle">
+    <mat-button-toggle-group [(value)]="useManualInput" (change)="toggleInputMethod()">
+      <mat-button-toggle [value]="false">
+        <mat-icon>qr_code_scanner</mat-icon>
+        Scanner
+      </mat-button-toggle>
+      <mat-button-toggle [value]="true">
+        <mat-icon>keyboard</mat-icon>
+        Manual
+      </mat-button-toggle>
+    </mat-button-toggle-group>
+  </div>
+
+  <!-- Scanner QR -->
+  <div *ngIf="!useManualInput" class="scanner-section">
+    <div class="scanner-container">
+      <!-- Scanner QR real -->
+      <zxing-scanner
+        *ngIf="scannerEnabled && !scanning"
+        [enable]="scannerEnabled"
+        [formats]="allowedFormats"
+        (scanSuccess)="onScanSuccess($event)"
+        (scanError)="onScanError($event)"
+        (camerasFound)="onCamerasFound($event)"
+        (permissionResponse)="onPermissionResponse($event)"
+        (torchCompatible)="onTorchCompatible($event)"
+        [torch]="torchEnabled"
+        class="qr-scanner">
+      </zxing-scanner>
+
+      <!-- Fallback si no funciona el scanner -->
+      <div class="scanner-placeholder" *ngIf="!scannerEnabled && !scanning && !useManualInput">
+        <mat-icon class="camera-icon">camera_alt</mat-icon>
+        <p>Error de cámara</p>
+        <p class="placeholder-text">
+          No se pudo acceder a la cámara. Usa entrada manual.
+        </p>
+        <button mat-raised-button color="primary" (click)="toggleInputMethod()">
+          Usar Entrada Manual
+        </button>
+      </div>
+
+      <!-- Procesando -->
+      <div *ngIf="scanning" class="processing-overlay">
+        <mat-spinner diameter="40"></mat-spinner>
+        <p>Procesando precinto...</p>
+      </div>
+    </div>
+
+    <!-- Instrucciones del scanner -->
+    <div class="scanner-instructions" *ngIf="!scanning && scannerEnabled">
+      <mat-icon>info</mat-icon>
+      <p>Apunta la cámara hacia el código QR del precinto</p>
+    </div>
+
+    <!-- Controles del scanner -->
+    <div class="scanner-controls" *ngIf="!scanning && scannerEnabled && torchAvailable">
+      <button
+        mat-icon-button
+        (click)="torchEnabled = !torchEnabled"
+        [class.active]="torchEnabled">
+        <mat-icon>{{ torchEnabled ? 'flash_off' : 'flash_on' }}</mat-icon>
+      </button>
+      <span class="torch-label">{{ torchEnabled ? 'Apagar' : 'Encender' }} flash</span>
+    </div>
+  </div>
+
+  <!-- Entrada manual -->
+  <div *ngIf="useManualInput" class="manual-section">
+    <mat-form-field appearance="outline" class="manual-input">
+      <mat-label>Contenido del QR</mat-label>
+      <input
+        matInput
+        [(ngModel)]="manualInput"
+        placeholder="Ej: 123|P-2024-001|45"
+        (keyup.enter)="processManualInput()">
+      <mat-icon matSuffix>qr_code</mat-icon>
+      <mat-hint>Ingresa el contenido completo del código QR</mat-hint>
+    </mat-form-field>
+
+    <div class="manual-actions">
+      <button
+        mat-raised-button
+        color="primary"
+        (click)="processManualInput()"
+        [disabled]="!manualInput.trim()">
+        <mat-icon>check</mat-icon>
+        Procesar
+      </button>
+      <button
+        mat-stroked-button
+        (click)="clearManualInput()"
+        [disabled]="!manualInput">
+        <mat-icon>clear</mat-icon>
+        Limpiar
+      </button>
+    </div>
+
+    <!-- Ejemplo de formato -->
+    <div class="format-example">
+      <mat-icon>lightbulb</mat-icon>
+      <div>
+        <p class="example-title">Formato esperado:</p>
+        <code>ID_PRECINTO|NUMERO_PRECINTO|ID_GENERADOR</code>
+        <p class="example-text">Ejemplo: <code>123|P-2024-001|45</code></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Resultado del escaneo -->
+  <div *ngIf="scanResult && !scanning" class="scan-result">
+    <mat-icon class="result-icon">qr_code</mat-icon>
+    <p>QR detectado: <code>{{ scanResult }}</code></p>
+  </div>
+
+  <!-- Error -->
+  <div *ngIf="error" class="error-section">
+    <mat-icon color="warn">error</mat-icon>
+    <p class="error-message">{{ error }}</p>
+  </div>
+
+</mat-dialog-content>
+
+<!-- Acciones del modal -->
+<mat-dialog-actions align="end" class="dialog-actions">
+  <button mat-stroked-button (click)="close()">
+    Cancelar
+  </button>
+
+  <button
+    *ngIf="useManualInput"
+    mat-raised-button
+    color="primary"
+    (click)="processManualInput()"
+    [disabled]="!manualInput.trim() || scanning">
+    <mat-icon>send</mat-icon>
+    Enviar
+  </button>
+</mat-dialog-actions>

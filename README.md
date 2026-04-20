@@ -1,4 +1,4 @@
-# 🗑️ Sistema de Trazabilidad de Residuos Patológicos — VEOLIA / AESA Misiones
+# 🗑️ Sistema de Trazabilidad de Residuos Patológicos
 
 > **Full-stack enterprise application** for pathological waste traceability management, developed for AESA Misiones S.A. (VEOLIA concession). Covers the complete waste lifecycle: from generator registration to treatment certification.
 

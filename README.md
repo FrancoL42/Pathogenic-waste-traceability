@@ -215,7 +215,7 @@ Certificate PDF auto-generated and emailed to generator
 
 ## 👨‍💻 Author
 
-Developed as a university capstone project (UTN FRC) for a real client: AESA Misiones S.A. (VEOLIA concession).
+Developed as a university capstone project (UTN FRC).
 
 ---
 
